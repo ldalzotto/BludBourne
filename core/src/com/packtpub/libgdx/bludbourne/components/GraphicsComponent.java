@@ -172,4 +172,10 @@ public abstract class GraphicsComponent implements Component {
         
     }
 
+    protected TextureRegion extractTextureRegion(TextureRegion textureRegions, GridPoint2 point, int textureHeight,
+                                                 int textureWidth){
+        TextureRegion[][] textures = textureRegions.split(textureWidth, textureHeight);
+        return textures[point.x][point.y];
+    }
+
 }

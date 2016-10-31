@@ -40,7 +40,7 @@ public class EntityFactory {
             case TYPEABLE:
                 entity = new Entity(new TypeableInputComponent(),
                         new NPCPhysicsComponent(),
-                        new NPCGraphicsComponent());
+                        new TypeableGraphicsComponent());
                 return entity;
             default:
                 return null;

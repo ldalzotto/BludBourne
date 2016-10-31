@@ -11,9 +11,19 @@ public class EntityConfig {
     Entity.State state = Entity.State.IDLE;
     Entity.Direction direction = Entity.Direction.DOWN;
     String entityID;
+    TypingBox typingBox;
+
+    public TypingBox getTypingBox() {
+        return typingBox;
+    }
+
+    public void setTypingBox(TypingBox typingBox) {
+        this.typingBox = typingBox;
+    }
 
     EntityConfig(){
         animationConfig = new Array<AnimationConfig>();
+        typingBox = new TypingBox();
     }
 
     public Array<AnimationConfig> getAnimationConfig() {
@@ -92,5 +102,49 @@ public class EntityConfig {
             this.gridPoints = gridPoints;
         }
     }
+
+    static public class TypingBox {
+        String texturePath;
+        GridPoint2 gridPoint;
+        Integer textureWidth;
+        Integer textureHeight;
+
+        public TypingBox(){
+            gridPoint = new GridPoint2();
+        }
+
+        public String getTexturePath() {
+            return texturePath;
+        }
+
+        public void setTexturePath(String texturePath) {
+            this.texturePath = texturePath;
+        }
+
+        public GridPoint2 getGridPoint() {
+            return gridPoint;
+        }
+
+        public void setGridPoint(GridPoint2 gridPoint) {
+            this.gridPoint = gridPoint;
+        }
+
+        public Integer getTextureWidth() {
+            return textureWidth;
+        }
+
+        public void setTextureWidth(Integer textureWidth) {
+            this.textureWidth = textureWidth;
+        }
+
+        public Integer getTextureHeight() {
+            return textureHeight;
+        }
+
+        public void setTextureHeight(Integer textureHeight) {
+            this.textureHeight = textureHeight;
+        }
+    }
+
 
 }

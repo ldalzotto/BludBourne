@@ -69,6 +69,8 @@ public class TownMap extends Map {
 
         if(entityConfig.getEntityID().contains("TYPE")){
             entity = EntityFactory.getEntity(EntityFactory.EntityType.TYPEABLE);
+            entity.setEntityConfig(entityConfig);
+            entity.sendMessage(Component.MESSAGE.LOAD_TYPING_BOX, _json.toJson(entity.getEntityConfig()));
         } else {
             entity = EntityFactory.getEntity(EntityFactory.EntityType.NPC);
         }

@@ -2,6 +2,16 @@
   entityID : TYPE01
   state : IMMOBILE
   direction : DOWN
+  typingBox:
+  {
+      texturePath: sprites/gui/10_basic_message_boxes_by_CharlesGabriel.png
+      gridPoint: {
+        x: 0
+        y: 4
+      }
+      textureHeight: 100
+      textureWidth: 480
+  }
   animationConfig: [
     {
       frameDuration: 0.1
