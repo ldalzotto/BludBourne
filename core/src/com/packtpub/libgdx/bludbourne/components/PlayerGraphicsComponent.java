@@ -65,6 +65,8 @@ public class PlayerGraphicsComponent extends GraphicsComponent {
                     _animations.put(animationType, animation);
 
                 }
+            } else if(string[0].equalsIgnoreCase(MESSAGE.CURRENT_DIRECTION.toString())){
+                _currentDirection = _json.fromJson(Entity.Direction.class, string[1]);
             }
         }
     }

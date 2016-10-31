@@ -35,6 +35,7 @@ public class PlayerInputComponent extends InputComponent implements InputProcess
         //Specifically for messages with 1 object payload
         if(string.length == 2) {
             if(string[0].equalsIgnoreCase(MESSAGE.CURRENT_DIRECTION.toString())){
+                //Gdx.app.debug(TAG, "Current Direction message received : " + message);
                 _currentDirection = _json.fromJson(Entity.Direction.class, string[1]);
             }
         }
