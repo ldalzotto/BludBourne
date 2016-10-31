@@ -60,7 +60,7 @@ public class PlayerInputComponent extends InputComponent implements InputProcess
             Gdx.app.exit();
         } else {
             entity.sendMessage(MESSAGE.CURRENT_STATE, _json.toJson(Entity.State.IDLE));
-            entity.sendMessage(MESSAGE.CURRENT_DIRECTION, _json.toJson(Entity.Direction.DOWN));
+            //entity.sendMessage(MESSAGE.CURRENT_DIRECTION, _json.toJson(Entity.Direction.DOWN));
         }
 
         //Mouse input

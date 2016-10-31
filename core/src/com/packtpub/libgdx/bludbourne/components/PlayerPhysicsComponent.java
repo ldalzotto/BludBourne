@@ -54,6 +54,7 @@ public class PlayerPhysicsComponent extends PhysicsComponent{
             if(string[0].equalsIgnoreCase(MESSAGE.INIT_START_POSITION.toString())){
                 _currentEntityPosition = _json.fromJson(Vector2.class, string[1]);
                 _nextEntityPosition.set(_currentEntityPosition.x, _currentEntityPosition.y);
+                Gdx.app.debug(TAG, "INIT_START_POSITION message received : " + _currentEntityPosition + "," + _nextEntityPosition);
             } else if(string[0].equalsIgnoreCase(MESSAGE.CURRENT_STATE.toString())){
                 _state = _json.fromJson(Entity.State.class, string[1]);
             } else if(string[0].equalsIgnoreCase(MESSAGE.CURRENT_DIRECTION.toString())){
@@ -107,19 +108,22 @@ public class PlayerPhysicsComponent extends PhysicsComponent{
             _isMouseSelectEnable = false;
         }
 
-        if( !isCollisionWithMapLayer(entity, mapMgr) &&
-                !isCollisionWithMapEntities(entity, mapMgr) &&
-                _state == Entity.State.WALKING){
-            setNextPositionToCurrent(entity);
+        if(_state == Entity.State.WALKING){
+            calculateNextPosition(delta);
+            if( !isCollisionWithMapLayer(entity, mapMgr) &&
+                    !isCollisionWithMapEntities(entity, mapMgr)){
+                setNextPositionToCurrent(entity);
 
-            Camera camera = mapMgr.getCamera();
-            camera.position.set(_currentEntityPosition.x, _currentEntityPosition.y, 0f);
-            camera.update();
-        } else {
+                Camera camera = mapMgr.getCamera();
+                camera.position.set(_currentEntityPosition.x, _currentEntityPosition.y, 0f);
+                camera.update();
+            } else {
+                updateBoundingBoxPosition(_currentEntityPosition);
+            }
+        } else{
             updateBoundingBoxPosition(_currentEntityPosition);
         }
 
-        calculateNextPosition(delta);
 
     }
 
