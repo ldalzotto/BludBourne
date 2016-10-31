@@ -1,6 +1,9 @@
 package com.packtpub.libgdx.bludbourne.map;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.packtpub.libgdx.bludbourne.Entity;
@@ -14,6 +17,8 @@ import com.packtpub.libgdx.bludbourne.components.Component;
 public class TownMap extends Map {
     private static final String TAG = TownMap.class.getSimpleName();
 
+    private static final String TYPEABLE_LAYER = "MAP_TYPEABLE_LAYER";
+
     private static String _mapPath = "maps/town.tmx";
     private static String _townGuardWalking = "scripts/town_guard_walking.json";
     private static String _townBlacksmith = "scripts/town_blacksmith.json";
@@ -21,11 +26,22 @@ public class TownMap extends Map {
     private static String _townInnKeeper = "scripts/town_innkeeper.json";
     private static String _townFolk = "scripts/town_folk.json";
 
+    private static String _townTypeable = "scripts/town_typeable.json";
+    private Array<Vector2> _typeablePositions;
+    private MapLayer _mapTypeableLayer;
+
     TownMap(){
         super(MapFactory.MapType.TOWN, _mapPath);
 
+        _mapTypeableLayer = _currentMap.getLayers().get(TYPEABLE_LAYER);
+
+        _typeablePositions = getTypeablePositions(_mapTypeableLayer);
+
         for(Vector2 position: _npcStartPositions){
             _mapEntities.add(initEntity(Entity.getEntityConfig(_townGuardWalking), position));
+        }
+        for(Vector2 position: _typeablePositions){
+            _mapEntities.add(initEntity(Entity.getEntityConfig(_townTypeable), position));
         }
 
         //SPecial cases
@@ -49,7 +65,13 @@ public class TownMap extends Map {
     }
 
     private Entity initEntity(EntityConfig entityConfig, Vector2 position){
-        Entity entity = EntityFactory.getEntity(EntityFactory.EntityType.NPC);
+        Entity entity;
+
+        if(entityConfig.getEntityID().contains("TYPE")){
+            entity = EntityFactory.getEntity(EntityFactory.EntityType.TYPEABLE);
+        } else {
+            entity = EntityFactory.getEntity(EntityFactory.EntityType.NPC);
+        }
 
         entity.setEntityConfig(entityConfig);
 
@@ -67,5 +89,23 @@ public class TownMap extends Map {
             position = _specialNPCStartPositions.get(entityConfig.getEntityID());
         }
         return initEntity(entityConfig, position);
+    }
+
+    private Array<Vector2> getTypeablePositions(MapLayer mpLayr){
+        Array<Vector2> typeablePositions = new Array<Vector2>();
+        for (MapObject object:
+             mpLayr.getObjects()) {
+            if(object instanceof RectangleMapObject){
+                float x = ((RectangleMapObject)object).getRectangle().getX();
+                float y = ((RectangleMapObject)object).getRectangle().getY();
+
+                //scale by the unit to convert from map coordinates
+                x *= UNIT_SCALE;
+                y *= UNIT_SCALE;
+
+                typeablePositions.add(new Vector2(x,y));
+            }
+        }
+        return typeablePositions;
     }
 }

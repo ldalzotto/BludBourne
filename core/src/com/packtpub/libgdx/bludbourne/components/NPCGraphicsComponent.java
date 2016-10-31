@@ -79,6 +79,10 @@ public class NPCGraphicsComponent extends GraphicsComponent {
 
                     _animations.put(animationType, animation);
                 }
+            } else if(string[0].equalsIgnoreCase(MESSAGE.INIT_DIRECTION.toString())){
+                _currentDirection = _json.fromJson(Entity.Direction.class, string[1]);
+            } else if(string[0].equalsIgnoreCase(MESSAGE.INIT_STATE.toString())){
+                _currentState = _json.fromJson(Entity.State.class, string[1]);
             }
         }
     }

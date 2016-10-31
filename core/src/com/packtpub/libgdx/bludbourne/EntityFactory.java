@@ -12,7 +12,7 @@ public class EntityFactory {
     private static Json _json = new Json();
 
     public static enum EntityType{
-        PLAYER, DEMO_PLAYER, NPC
+        PLAYER, DEMO_PLAYER, NPC, TYPEABLE
     }
 
     public static String PLAYER_CONFIG = "scripts/player.json";
@@ -34,6 +34,11 @@ public class EntityFactory {
                 return entity;
             case NPC:
                 entity = new Entity(new NPCInputComponent(),
+                        new NPCPhysicsComponent(),
+                        new NPCGraphicsComponent());
+                return entity;
+            case TYPEABLE:
+                entity = new Entity(new TypeableInputComponent(),
                         new NPCPhysicsComponent(),
                         new NPCGraphicsComponent());
                 return entity;

@@ -1,6 +1,7 @@
 package com.packtpub.libgdx.bludbourne.map;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.utils.Array;
 import com.packtpub.libgdx.bludbourne.Entity;
 
 /**

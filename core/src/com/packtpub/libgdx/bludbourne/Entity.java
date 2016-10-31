@@ -81,6 +81,19 @@ public class Entity {
         _components.add(_graphicsComponent);
     }
 
+    public Entity(InputComponent inputComponent, PhysicsComponent physicsComponent){
+        _entityConfig = new EntityConfig();
+        _json = new Json();
+
+        _components = new Array<Component>(MAX_COMPONENTS);
+
+        _inputComponent = inputComponent;
+        _physicsComponent = physicsComponent;
+
+        _components.add(_inputComponent);
+        _components.add(_physicsComponent);
+    }
+
     public EntityConfig getEntityConfig(){
         return _entityConfig;
     }
@@ -100,9 +113,15 @@ public class Entity {
     }
 
     public void update(MapManager mapMgr, Batch batch, float delta) {
-        _inputComponent.update(this, delta);
-        _physicsComponent.update(this, mapMgr, delta);
-        _graphicsComponent.update(this, mapMgr, batch, delta);
+        if(_inputComponent != null){
+            _inputComponent.update(this, delta);
+        }
+        if(_physicsComponent != null){
+            _physicsComponent.update(this, mapMgr, delta);
+        }
+        if(_graphicsComponent != null){
+            _graphicsComponent.update(this, mapMgr, batch, delta);
+        }
     }
 
     public void dispose(){

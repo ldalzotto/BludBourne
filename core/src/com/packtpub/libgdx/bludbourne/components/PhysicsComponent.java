@@ -64,6 +64,7 @@ public abstract class PhysicsComponent implements Component {
             if(_boundingBox.overlaps(targetRect)){
                 //Collision
                 entity.sendMessage(MESSAGE.COLLISION_WITH_ENTITY);
+                Gdx.app.debug(TAG, "Collision detected with : " + mapEntity.getEntityConfig().getEntityID());
                 isCollisionWithMapEntities = true;
                 break;
             }
@@ -103,6 +104,7 @@ public abstract class PhysicsComponent implements Component {
                 rectangle = ((RectangleMapObject) object).getRectangle();
                 if (_boundingBox.overlaps(rectangle)) {
                     //collision
+                    Gdx.app.debug(TAG, "Collision detected with : " + object.getName());
                     entity.sendMessage(MESSAGE.COLLISION_WITH_MAP);
                     return true;
                 }

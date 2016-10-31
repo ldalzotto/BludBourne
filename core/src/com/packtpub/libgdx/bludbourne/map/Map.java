@@ -48,6 +48,7 @@ public abstract class Map {
     protected MapFactory.MapType _currentMapType;
     protected Array<Entity> _mapEntities;
 
+
     Map(MapFactory.MapType mapType, String fullMapPath){
         _json = new Json();
         _mapEntities = new Array<Entity>(10);
@@ -91,7 +92,7 @@ public abstract class Map {
         _specialNPCStartPositions = getSpecialNPCStartPositions();
     }
 
-    public Array<Entity> getMapEntities(){
+    public Array<Entity> getMapEntities() {
         return _mapEntities;
     }
 

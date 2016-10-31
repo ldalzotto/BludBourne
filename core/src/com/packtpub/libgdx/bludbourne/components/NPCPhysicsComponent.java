@@ -38,6 +38,8 @@ public class NPCPhysicsComponent extends PhysicsComponent {
                 _state = _json.fromJson(Entity.State.class, string[1]);
             } else if (string[0].equalsIgnoreCase(MESSAGE.CURRENT_DIRECTION.toString())) {
                 _currentDirection = _json.fromJson(Entity.Direction.class, string[1]);
+            } else if (string[0].equalsIgnoreCase(MESSAGE.INIT_STATE.toString())){
+                _state = _json.fromJson(Entity.State.class, string[1]);
             }
         }
     }
@@ -46,7 +48,10 @@ public class NPCPhysicsComponent extends PhysicsComponent {
     public void update(Entity entity, MapManager mapMgr, float delta) {
         updateBoundingBoxPosition(_nextEntityPosition);
 
-        if( _state == Entity.State.IMMOBILE ) return;
+        if( _state == Entity.State.IMMOBILE ) {
+            updateBoundingBoxPosition(_currentEntityPosition);
+            return;
+        }
 
         if (    !isCollisionWithMapLayer(entity, mapMgr) &&
                 !isCollisionWithMapEntities(entity, mapMgr) &&
