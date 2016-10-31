@@ -15,6 +15,9 @@ import com.packtpub.libgdx.bludbourne.map.Map;
 import com.packtpub.libgdx.bludbourne.map.MapFactory;
 import com.packtpub.libgdx.bludbourne.map.MapManager;
 
+import java.util.Enumeration;
+import java.util.Hashtable;
+
 /**
  * Created by ldalzotto on 30/10/2016.
  */
@@ -28,12 +31,15 @@ public class PlayerPhysicsComponent extends PhysicsComponent{
     private Ray _selectionRay;
     private float _selectRayMaximumDistance = 32.0f;
 
+    private Hashtable<String, Boolean> _selectedEntity;
+
     public PlayerPhysicsComponent(){
         _bouBoundingBoxLocation = BoundingBoxLocation.BOTTOM_CENTER;
         initBoundingBox(0.3f, 0.3f);
 
         _mouseSelectCoordinates = new Vector3(0,0,0);
         _selectionRay = new Ray(new Vector3(), new Vector3());
+        _selectedEntity = new Hashtable<String, Boolean>();
     }
 
     @Override
@@ -80,6 +86,9 @@ public class PlayerPhysicsComponent extends PhysicsComponent{
                 currentEntities) {
             //Don't break, reset all entities
             mapEntity.sendMessage(MESSAGE.ENTITY_DESELECTED);
+            if(_selectedEntity.get(mapEntity.getEntityConfig().getEntityID())!=null){
+                _selectedEntity.remove(mapEntity.getEntityConfig().getEntityID());
+            }
             Rectangle mapEntityBoundingBox = mapEntity.getCurrentBoundingBox();
 
             if(mapEntity.getCurrentBoundingBox().contains(_mouseSelectCoordinates.x, _mouseSelectCoordinates.y)){
@@ -91,10 +100,33 @@ public class PlayerPhysicsComponent extends PhysicsComponent{
                     //we have a valid entity selecttion Picked/Selected
                     Gdx.app.debug(TAG, "Selected Entity! " + mapEntity.getEntityConfig().getEntityID());
                     mapEntity.sendMessage(MESSAGE.ENTITY_SELECTED);
+                    _selectedEntity.put(mapEntity.getEntityConfig().getEntityID(), true);
                 }
             }
         }
 
+    }
+
+    private void clearMapEntityCandidateIfTooFarAway(MapManager mapManager){
+        Enumeration<String> enumKey = _selectedEntity.keys();
+        while(enumKey.hasMoreElements()){
+            String key = enumKey.nextElement();
+            if(_selectedEntity.get(key)){
+                Array<Entity> currentEntities = mapManager.getCurrentMapEntities();
+                for (Entity mapEntity :
+                        currentEntities) {
+                        if (mapEntity.getEntityConfig().getEntityID().equals(key)) {
+                            Vector2 entityPosition = new Vector2(0,0);
+                            mapEntity.getCurrentBoundingBox().getCenter(entityPosition);
+                            entityPosition.scl(Map.UNIT_SCALE);
+                            if(_currentEntityPosition.dst(entityPosition) >= _selectRayMaximumDistance*Map.UNIT_SCALE){
+                                mapEntity.sendMessage(MESSAGE.ENTITY_DESELECTED);
+                                _selectedEntity.remove(mapEntity.getEntityConfig().getEntityID());
+                            }
+                        }
+                    }
+            }
+        }
     }
 
     @Override
@@ -107,6 +139,7 @@ public class PlayerPhysicsComponent extends PhysicsComponent{
             selectMapEntityCandidate(mapMgr);
             _isMouseSelectEnable = false;
         }
+        clearMapEntityCandidateIfTooFarAway(mapMgr);
 
         if(_state == Entity.State.WALKING){
             calculateNextPosition(delta);
