@@ -110,6 +110,8 @@ public class PlayerPhysicsComponent extends PhysicsComponent{
 
         if(_state == Entity.State.WALKING){
             calculateNextPosition(delta);
+            updateBoundingBoxPosition(_nextEntityPosition);
+            //updateNextBoundingBoxPosition(_nextEntityPosition);
             if( !isCollisionWithMapLayer(entity, mapMgr) &&
                     !isCollisionWithMapEntities(entity, mapMgr)){
                 setNextPositionToCurrent(entity);
@@ -120,6 +122,7 @@ public class PlayerPhysicsComponent extends PhysicsComponent{
             } else {
                 updateBoundingBoxPosition(_currentEntityPosition);
             }
+
         } else{
             updateBoundingBoxPosition(_currentEntityPosition);
         }

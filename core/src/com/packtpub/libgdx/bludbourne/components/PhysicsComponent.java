@@ -33,6 +33,7 @@ public abstract class PhysicsComponent implements Component {
     public abstract void update(Entity entity, MapManager mapMgr, float delta);
 
     public Rectangle _boundingBox;
+
     protected BoundingBoxLocation _bouBoundingBoxLocation;
 
     public static enum BoundingBoxLocation{

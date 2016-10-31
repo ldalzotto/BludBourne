@@ -2,6 +2,7 @@ package com.packtpub.libgdx.bludbourne.components;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -95,15 +96,15 @@ public class NPCGraphicsComponent extends GraphicsComponent {
         batch.end();
 
         //Used to graphically debug boundingboxes
-        /*
+
         Rectangle rect = entity.getCurrentBoundingBox();
-        Camera camera = mapMgr.getCamera();
+        Camera camera = mapManager.getCamera();
         _shapeRenderer.setProjectionMatrix(camera.combined);
         _shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         _shapeRenderer.setColor(Color.BLACK);
         _shapeRenderer.rect(rect.getX() * Map.UNIT_SCALE, rect.getY() * Map.UNIT_SCALE, rect.getWidth() * Map.UNIT_SCALE, rect.getHeight() * Map.UNIT_SCALE);
         _shapeRenderer.end();
-        */
+
     }
 
     private void drawSelected(Entity entity, MapManager mapMgr){
