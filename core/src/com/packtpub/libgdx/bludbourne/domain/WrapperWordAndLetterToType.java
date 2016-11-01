@@ -1,6 +1,7 @@
 package com.packtpub.libgdx.bludbourne.domain;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -72,5 +73,17 @@ public class WrapperWordAndLetterToType {
             letterToTypeValue.put(String.valueOf(wordToType.charAt(i)), Boolean.FALSE);
             _wordAndLetterToType.put(String.valueOf(i+1), letterToTypeValue);
         }
+    }
+
+    public String getCurrentGuessedWord(){
+        StringBuilder stringToReturn = new StringBuilder();
+        Iterator<Map.Entry<String, HashMap<String, Boolean>>> iterator = _wordAndLetterToType.entrySet().iterator();
+        while (iterator.hasNext()){
+            Map.Entry<String, HashMap<String, Boolean>> entry = iterator.next();
+            if(entry.getValue().entrySet().iterator().next().getValue()){
+                stringToReturn.append(entry.getValue().entrySet().iterator().next().getKey());
+            }
+        }
+        return stringToReturn.toString();
     }
 }

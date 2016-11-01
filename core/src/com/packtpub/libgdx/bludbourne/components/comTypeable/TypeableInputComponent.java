@@ -80,14 +80,17 @@ public class TypeableInputComponent extends InputComponent implements InputProce
             String expectedLetter = expectedTypingInfo.get(WrapperWordAndLetterToType.EXPECTED_TYPING_INFO.EXPECTED_LETTER);
             String expectedKey = expectedTypingInfo.get(WrapperWordAndLetterToType.EXPECTED_TYPING_INFO.EXPECTED_KEY);
 
-            //TODO rendre ceci générique
-            if (keycode == Input.Keys.T) {
-                if(expectedLetter.equalsIgnoreCase("t") && expectedKey != null){
-                    _wrapperWordAndLetterToType.setValueToTrue(expectedKey, "t");
-                    _letterFound = true;
+        if(expectedLetter != null && expectedKey != null){
+                for(int i = 0; i < LETTER_CODE.values().length; i ++){
+                        if(keycode == LETTER_CODE.values()[i]._letterCode){
+                            if(expectedLetter.equalsIgnoreCase(LETTER_CODE.values()[i].name())){
+                                _wrapperWordAndLetterToType.setValueToTrue(expectedKey, LETTER_CODE.values()[i].name());
+                                _letterFound = true;
+                            }
+                            return true;
+                        }
+                    }
                 }
-                return true;
-            }
         }
         return false;
     }
@@ -125,5 +128,18 @@ public class TypeableInputComponent extends InputComponent implements InputProce
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    private static enum LETTER_CODE{
+
+        A(29), B(30), C(31), D(32), E(33), F(34), G(35), H(36), I(37), J(38), K(39), L(40), M(41), N(42),
+        O(43), P(44), Q(45), R(46), S(47), T(48), U(49), V(50), W(51), X(52), Y(53), Z(54);
+
+        private int _letterCode;
+
+        LETTER_CODE(int code){
+            _letterCode = code;
+        }
+
     }
 }

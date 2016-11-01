@@ -30,6 +30,8 @@ public class TypeableGraphicsComponent extends GraphicsComponent {
 
     private static final String TAG = TypeableGraphicsComponent.class.getSimpleName();
 
+    private static float DISTANCE_BETWEEN_LETTERS = 1;
+
     private boolean _isSelected = false;
 
     private TextureRegion _typingBoxTexture;
@@ -77,6 +79,7 @@ public class TypeableGraphicsComponent extends GraphicsComponent {
         if(string.length == 1){
             if(string[0].equalsIgnoreCase(MESSAGE.ENTITY_DESELECTED.toString())){
                 _isSelected = false;
+                _wrapperWordAndLetterToType.getWordAndLetterToType().clear();
             } else if(string[0].equalsIgnoreCase(MESSAGE.ENTITY_SELECTED.toString())){
                 _isSelected = true;
             }
@@ -149,13 +152,13 @@ public class TypeableGraphicsComponent extends GraphicsComponent {
 
         //Used to graphically debug boundingboxes
 
-        Rectangle rect = entity.getCurrentBoundingBox();
+        /**Rectangle rect = entity.getCurrentBoundingBox();
         Camera camera = mapManager.getCamera();
         _shapeRenderer.setProjectionMatrix(camera.combined);
         _shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         _shapeRenderer.setColor(Color.BLACK);
         _shapeRenderer.rect(rect.getX() * Map.UNIT_SCALE, rect.getY() * Map.UNIT_SCALE, rect.getWidth() * Map.UNIT_SCALE, rect.getHeight() * Map.UNIT_SCALE);
-        _shapeRenderer.end();
+        _shapeRenderer.end();**/
 
     }
 
@@ -163,10 +166,27 @@ public class TypeableGraphicsComponent extends GraphicsComponent {
         _typingBoxWidth = 2;
         batch.draw(_typingBoxTexture, _currentPosition.x,
                 _currentPosition.y + entity.getCurrentBoundingBox().getHeight()*Map.UNIT_SCALE, 2, 1);
-        _typeFont.draw(batch, _wordToType, _currentPosition.x,
-                _currentPosition.y + 2*entity.getCurrentBoundingBox().getHeight()*Map.UNIT_SCALE);
-        _typeFont.draw(batch, "f", _currentPosition.x,
-                _currentPosition.y);
+
+        String wordCurrentlyGuessed = _wrapperWordAndLetterToType.getCurrentGuessedWord();
+        if(wordCurrentlyGuessed.length() != _wordToType.length()) {
+            for (int i = 0; i < wordCurrentlyGuessed.length(); i++) {
+                _typeFont.setColor(Color.BLUE);
+                _typeFont.draw(batch, String.valueOf(wordCurrentlyGuessed.charAt(i)), _currentPosition.x + (i * DISTANCE_BETWEEN_LETTERS),
+                        _currentPosition.y + 2 * entity.getCurrentBoundingBox().getHeight() * Map.UNIT_SCALE);
+            }
+
+            for (int i = wordCurrentlyGuessed.length(); i < _wordToType.length(); i++) {
+                _typeFont.setColor(Color.GRAY);
+                _typeFont.draw(batch, String.valueOf(_wordToType.charAt(i)), _currentPosition.x + (i * DISTANCE_BETWEEN_LETTERS),
+                        _currentPosition.y + 2 * entity.getCurrentBoundingBox().getHeight() * Map.UNIT_SCALE);
+            }
+        } else {
+            for (int i = 0; i < wordCurrentlyGuessed.length(); i++) {
+                _typeFont.setColor(Color.GREEN);
+                _typeFont.draw(batch, String.valueOf(wordCurrentlyGuessed.charAt(i)), _currentPosition.x + (i * DISTANCE_BETWEEN_LETTERS),
+                        _currentPosition.y + 2 * entity.getCurrentBoundingBox().getHeight() * Map.UNIT_SCALE);
+            }
+        }
     }
 
     private String getRandomWord(TYPE_SUBJECT subject){
