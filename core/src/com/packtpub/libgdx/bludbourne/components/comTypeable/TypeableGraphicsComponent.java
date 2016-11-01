@@ -17,6 +17,7 @@ import com.packtpub.libgdx.bludbourne.EntityConfig;
 import com.packtpub.libgdx.bludbourne.Utility;
 import com.packtpub.libgdx.bludbourne.components.comAbstract.GraphicsComponent;
 import com.packtpub.libgdx.bludbourne.components.comInterface.Component;
+import com.packtpub.libgdx.bludbourne.domain.WrapperWordAndLetterToType;
 import com.packtpub.libgdx.bludbourne.map.Map;
 import com.packtpub.libgdx.bludbourne.map.MapManager;
 
@@ -179,17 +180,7 @@ public class TypeableGraphicsComponent extends GraphicsComponent {
     }
 
     private void initTypingWordLogic(Entity entity){
-        HashMap<String, Boolean> wordToTypeValue = new HashMap<String, Boolean>();
-        wordToTypeValue.put(_wordToType, Boolean.FALSE);
-
-        _wrapperWordAndLetterToType.getWordAndLetterToType().put(String.valueOf(0), wordToTypeValue);
-
-        for (int i = 0; i < _wordToType.length(); i++){
-            HashMap<String, Boolean> letterToTypeValue = new HashMap<String, Boolean>();
-            letterToTypeValue.put(String.valueOf(_wordToType.charAt(i)), Boolean.FALSE);
-            _wrapperWordAndLetterToType.getWordAndLetterToType().put(String.valueOf(i+1), letterToTypeValue);
-        }
-
+        _wrapperWordAndLetterToType.initMap(_wordToType);
         entity.sendMessage(MESSAGE.TYPING_WORD_INIT, _json.toJson(_wrapperWordAndLetterToType));
     }
 

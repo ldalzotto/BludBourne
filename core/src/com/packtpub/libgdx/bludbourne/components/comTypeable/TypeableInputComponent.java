@@ -1,16 +1,13 @@
 package com.packtpub.libgdx.bludbourne.components.comTypeable;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
-import com.badlogic.gdx.utils.JsonValue;
 import com.packtpub.libgdx.bludbourne.Entity;
 import com.packtpub.libgdx.bludbourne.components.comAbstract.InputComponent;
 import com.packtpub.libgdx.bludbourne.components.comInterface.Component;
+import com.packtpub.libgdx.bludbourne.domain.WrapperWordAndLetterToType;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -73,27 +70,20 @@ public class TypeableInputComponent extends InputComponent implements InputProce
     @Override
     public boolean keyDown(int keycode) {
 
-        if(!_wrapperWordAndLetterToType.getWordAndLetterToType().isEmpty()) {
-            String letterThatPlayerHaveToType = "";
-            String keyOfLetterThatPlayerHaveToType = null;
+        if(!_wrapperWordAndLetterToType.isEmpty()) {
 
-            Integer wordLength = _wrapperWordAndLetterToType.getWordAndLetterToType().get(String.valueOf(0)).entrySet().iterator().next().getKey().length();
+            Map<WrapperWordAndLetterToType.EXPECTED_TYPING_INFO, String> expectedTypingInfo
+                    = new HashMap<WrapperWordAndLetterToType.EXPECTED_TYPING_INFO, String>();
 
-            for(int i = 1; i <= wordLength ; i++){
-                if(!_wrapperWordAndLetterToType.getWordAndLetterToType().get(String.valueOf(i)).entrySet().iterator().next().getValue()){
-                    letterThatPlayerHaveToType = _wrapperWordAndLetterToType.getWordAndLetterToType().get(String.valueOf(i)).entrySet().iterator().next().getKey();
-                    keyOfLetterThatPlayerHaveToType = String.valueOf(i);
-                    break;
-                }
-            }
+            expectedTypingInfo = _wrapperWordAndLetterToType.getExpectedLetterAndKey();
+
+            String expectedLetter = expectedTypingInfo.get(WrapperWordAndLetterToType.EXPECTED_TYPING_INFO.EXPECTED_LETTER);
+            String expectedKey = expectedTypingInfo.get(WrapperWordAndLetterToType.EXPECTED_TYPING_INFO.EXPECTED_KEY);
 
             //TODO rendre ceci générique
             if (keycode == Input.Keys.T) {
-                if(letterThatPlayerHaveToType.equalsIgnoreCase("t") && keyOfLetterThatPlayerHaveToType != null){
-                    HashMap<String, Boolean> setValueToTrue = new HashMap<String, Boolean>();
-                    setValueToTrue.put("t", Boolean.TRUE);
-                    _wrapperWordAndLetterToType.getWordAndLetterToType().put(String.valueOf(keyOfLetterThatPlayerHaveToType),
-                            setValueToTrue);
+                if(expectedLetter.equalsIgnoreCase("t") && expectedKey != null){
+                    _wrapperWordAndLetterToType.setValueToTrue(expectedKey, "t");
                     _letterFound = true;
                 }
                 return true;
