@@ -52,7 +52,11 @@ public class TypeableInputComponent extends InputComponent implements InputProce
             if(string[0].equalsIgnoreCase(MESSAGE.TYPING_WORD_INIT.toString())){
                 addInputProcessor(this, 0);
                 _wrapperWordAndLetterToType = _json.fromJson(WrapperWordAndLetterToType.class, string[1]);
-
+            }
+            if(string[0].equalsIgnoreCase(MESSAGE.INIT_DIRECTION.toString())){
+                _currentDirection = _json.fromJson(Entity.Direction.class, string[1]);
+            } else if(string[0].equalsIgnoreCase(MESSAGE.INIT_STATE.toString())){
+                _currentState = _json.fromJson(Entity.State.class, string[1]);
             }
         }
     }
@@ -64,6 +68,9 @@ public class TypeableInputComponent extends InputComponent implements InputProce
             entity.sendMessage(MESSAGE.TYPING_LETTER_FOUND, _json.toJson(_wrapperWordAndLetterToType));
             _letterFound = false;
         }
+
+        entity.sendMessage(MESSAGE.CURRENT_DIRECTION, _json.toJson(_currentDirection));
+        entity.sendMessage(MESSAGE.CURRENT_STATE, _json.toJson(_currentState));
 
     }
 
