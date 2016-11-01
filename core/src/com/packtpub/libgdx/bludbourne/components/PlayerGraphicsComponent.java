@@ -14,6 +14,8 @@ import com.packtpub.libgdx.bludbourne.EntityConfig;
 import com.packtpub.libgdx.bludbourne.map.Map;
 import com.packtpub.libgdx.bludbourne.map.MapManager;
 
+import java.util.HashMap;
+
 /**
  * Created by ldalzotto on 30/10/2016.
  */
@@ -21,8 +23,11 @@ public class PlayerGraphicsComponent extends GraphicsComponent {
 
     private static final String TAG = PlayerPhysicsComponent.class.getSimpleName();
 
-    public PlayerGraphicsComponent(){
+    private HashMap<String, Boolean> _wordAndLetterToType;
 
+
+    public PlayerGraphicsComponent(){
+        _wordAndLetterToType = new HashMap<String, Boolean>();
     }
 
     @Override
@@ -71,6 +76,8 @@ public class PlayerGraphicsComponent extends GraphicsComponent {
                 }
             } else if(string[0].equalsIgnoreCase(MESSAGE.CURRENT_DIRECTION.toString())){
                 _currentDirection = _json.fromJson(Entity.Direction.class, string[1]);
+            } else if(string[0].equalsIgnoreCase(MESSAGE.TYPING_LETTER_FOUND.toString())){
+                _wordAndLetterToType = _json.fromJson(HashMap.class, string[1]);
             }
         }
     }
@@ -97,6 +104,11 @@ public class PlayerGraphicsComponent extends GraphicsComponent {
         _shapeRenderer.rect(rect.getX() * Map.UNIT_SCALE, rect.getY() * Map.UNIT_SCALE, rect.getWidth() * Map.UNIT_SCALE, rect.getHeight()*Map.UNIT_SCALE);
         _shapeRenderer.end();
 
+        if(!_wordAndLetterToType.isEmpty()){
+            Entity typingEntity = mapManager.getEntityToType();
+            typingEntity.sendMessage(MESSAGE.TYPING_LETTER_FOUND, _json.toJson(_wordAndLetterToType));
+            _wordAndLetterToType.clear();
+        }
 
     }
 }

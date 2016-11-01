@@ -68,6 +68,17 @@ public class MapManager {
         return _currentMap.getMapEntities();
     }
 
+    public Entity getEntityToType(){
+        Entity returnEntity = null;
+        for (Entity entity :
+                _currentMap.getMapEntities()) {
+            if(entity.isGettingTyped()){
+                returnEntity = entity;
+            }
+        }
+        return returnEntity;
+    }
+
     public void setPlayer(Entity entity){
         this._player = entity;
     }

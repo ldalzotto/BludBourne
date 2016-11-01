@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.GridPoint2;
@@ -19,6 +20,9 @@ import com.packtpub.libgdx.bludbourne.Utility;
 import com.packtpub.libgdx.bludbourne.map.Map;
 import com.packtpub.libgdx.bludbourne.map.MapManager;
 
+import java.io.StringReader;
+import java.util.HashMap;
+
 /**
  * Created by ldalzotto on 31/10/2016.
  */
@@ -29,10 +33,31 @@ public class TypeableGraphicsComponent extends GraphicsComponent {
     private boolean _isSelected = false;
 
     private TextureRegion _typingBoxTexture;
+
     private String _wordToType;
+    private float _letterWidth;
+
+    BitmapFont _typeFont;
+
+    private float _typingBoxWidth;
+    private HashMap<String, Boolean> _wordAndLetterToType;
+
+    public enum TYPE_SUBJECT {
+        FOOD, NATURE
+    }
+
+    public HashMap<String, Boolean> get_wordAndLetterToType() {
+        return _wordAndLetterToType;
+    }
+
+    public void set_wordAndLetterToType(HashMap<String, Boolean> _wordAndLetterToType) {
+        this._wordAndLetterToType = _wordAndLetterToType;
+    }
 
     public TypeableGraphicsComponent(){
-
+        _typeFont = new BitmapFont();
+        _typeFont.getData().setScale(0.1f, 0.1f);
+        _wordAndLetterToType = new HashMap<String, Boolean>();
     }
 
     @Override
@@ -99,6 +124,8 @@ public class TypeableGraphicsComponent extends GraphicsComponent {
                     _typingBoxTexture = extractTextureRegion(new TextureRegion(texture), typingBox.getGridPoint(),
                             typingBox.getTextureWidth(), typingBox.getTextureHeight());
                 }
+            } else if(string[0].equalsIgnoreCase(MESSAGE.TYPING_LETTER_FOUND.toString())){
+                _wordAndLetterToType = _json.fromJson(HashMap.class, string[1]);
             }
         }
     }
@@ -107,11 +134,14 @@ public class TypeableGraphicsComponent extends GraphicsComponent {
     public void update(Entity entity, MapManager mapManager, Batch batch, float delta) {
         updateAnimations(delta);
 
-
         batch.begin();
         batch.draw(_currentFrame, _currentPosition.x, _currentPosition.y, 1, 1);
         if(_isSelected){
+            _wordToType = getRandomWord(TYPE_SUBJECT.NATURE);
             drawTypingBox(batch, entity);
+            if(_wordAndLetterToType.isEmpty()) {
+                initTypingWordLogic(entity, mapManager);
+            }
         }
         batch.end();
 
@@ -128,8 +158,31 @@ public class TypeableGraphicsComponent extends GraphicsComponent {
     }
 
     private void drawTypingBox(Batch batch, Entity entity){
+        _typingBoxWidth = 2;
         batch.draw(_typingBoxTexture, _currentPosition.x,
                 _currentPosition.y + entity.getCurrentBoundingBox().getHeight()*Map.UNIT_SCALE, 2, 1);
+        _typeFont.draw(batch, _wordToType, _currentPosition.x,
+                _currentPosition.y + 2*entity.getCurrentBoundingBox().getHeight()*Map.UNIT_SCALE);
+        _typeFont.draw(batch, "f", _currentPosition.x,
+                _currentPosition.y);
+    }
+
+    private String getRandomWord(TYPE_SUBJECT subject){
+        if(subject.equals(TYPE_SUBJECT.FOOD)){
+            return "Cake";
+        } else if (subject.equals(TYPE_SUBJECT.NATURE)){
+            return "Tree";
+        } else {
+            return "Debug";
+        }
+    }
+
+    private void initTypingWordLogic(Entity entity, MapManager mapManager){
+        _wordAndLetterToType.put(_wordToType, Boolean.FALSE);
+        for (int i = 0; i < _wordToType.length(); i++){
+            _wordAndLetterToType.put(String.valueOf(_wordToType.charAt(i)), Boolean.FALSE);
+        }
+        mapManager.getPlayer().sendMessage(MESSAGE.TYPING_WORD_INIT, _json.toJson(_wordAndLetterToType));
     }
 
 }

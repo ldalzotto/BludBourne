@@ -19,7 +19,9 @@ public interface Component {
         INIT_SELECT_ENTITY,
         ENTITY_SELECTED,
         ENTITY_DESELECTED,
-        LOAD_TYPING_BOX
+        LOAD_TYPING_BOX,
+        TYPING_WORD_INIT,
+        TYPING_LETTER_FOUND;
     }
 
     void dispose();

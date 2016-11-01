@@ -6,6 +6,9 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector3;
 import com.packtpub.libgdx.bludbourne.Entity;
 
+import java.util.HashMap;
+import java.util.Iterator;
+
 /**
  * Created by ldalzotto on 30/10/2016.
  */
@@ -14,9 +17,18 @@ public class PlayerInputComponent extends InputComponent implements InputProcess
     public final static String TAG = PlayerInputComponent.class.getSimpleName();
     private Vector3 _lastMouseCoordinates;
 
+    private String _typingWord;
+    private HashMap<String, Boolean> _wordAndLetterToType;
+
+    private boolean _letterFound;
+
     public PlayerInputComponent(){
         this._lastMouseCoordinates = new Vector3();
-        Gdx.input.setInputProcessor(this);
+        _typingWord = "";
+        _letterFound = false;
+        _wordAndLetterToType = new HashMap<String, Boolean>();
+        _inputMultiplexer.addProcessor(this);
+        //Gdx.input.setInputProcessor(this);
     }
 
     @Override
@@ -37,6 +49,8 @@ public class PlayerInputComponent extends InputComponent implements InputProcess
             if(string[0].equalsIgnoreCase(MESSAGE.CURRENT_DIRECTION.toString())){
                 //Gdx.app.debug(TAG, "Current Direction message received : " + message);
                 _currentDirection = _json.fromJson(Entity.Direction.class, string[1]);
+            } else if(string[0].equalsIgnoreCase(MESSAGE.TYPING_WORD_INIT.toString())){
+                _wordAndLetterToType = _json.fromJson(HashMap.class, string[1]);
             }
         }
     }
@@ -68,27 +82,52 @@ public class PlayerInputComponent extends InputComponent implements InputProcess
             entity.sendMessage(MESSAGE.INIT_SELECT_ENTITY, _json.toJson(_lastMouseCoordinates));
             mouseButtons.put(Mouse.SELECT, false);
         }
+
+        if(_letterFound){
+            entity.sendMessage(MESSAGE.TYPING_LETTER_FOUND, _json.toJson(_wordAndLetterToType));
+            _letterFound = false;
+        }
     }
 
     @Override
     public boolean keyDown(int keycode) {
         if( keycode == Input.Keys.LEFT || keycode == Input.Keys.A){
             this.leftPressed();
+            return true;
         }
         if( keycode == Input.Keys.RIGHT || keycode == Input.Keys.D){
             this.rightPressed();
+            return true;
         }
         if( keycode == Input.Keys.UP || keycode == Input.Keys.W){
             this.upPressed();
+            return true;
         }
         if( keycode == Input.Keys.DOWN || keycode == Input.Keys.S){
             this.downPressed();
+            return true;
         }
-        if( keycode == Input.Keys.Q){
+        if( keycode == Input.Keys.ESCAPE){
             this.quitPressed();
+            return true;
         }
 
-        return true;    }
+        if(!_wordAndLetterToType.isEmpty()) {
+            if (keycode == Input.Keys.T) {
+                Iterator<String> keys = _wordAndLetterToType.keySet().iterator();
+                while (keys.hasNext()) {
+                    String letter = keys.next();
+                    if (letter.length() == 1 && letter.equalsIgnoreCase("t") && !_wordAndLetterToType.get(letter)) {
+                        _wordAndLetterToType.put(letter, Boolean.TRUE);
+                        _letterFound = true;
+                    }
+                }
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     @Override
     public boolean keyUp(int keycode) {

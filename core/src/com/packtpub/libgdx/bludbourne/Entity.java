@@ -7,10 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
-import com.packtpub.libgdx.bludbourne.components.Component;
-import com.packtpub.libgdx.bludbourne.components.GraphicsComponent;
-import com.packtpub.libgdx.bludbourne.components.InputComponent;
-import com.packtpub.libgdx.bludbourne.components.PhysicsComponent;
+import com.packtpub.libgdx.bludbourne.components.*;
 import com.packtpub.libgdx.bludbourne.map.MapManager;
 
 import java.util.ArrayList;
@@ -153,6 +150,15 @@ public class Entity {
             configs.add(json.readValue(EntityConfig.class, jsonVal));
         }
         return configs;
+    }
+
+    public boolean isGettingTyped(){
+        if(_graphicsComponent instanceof TypeableGraphicsComponent){
+            if(!((TypeableGraphicsComponent)_graphicsComponent).get_wordAndLetterToType().isEmpty()){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

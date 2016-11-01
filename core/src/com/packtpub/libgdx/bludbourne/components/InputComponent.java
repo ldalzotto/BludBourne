@@ -1,5 +1,7 @@
 package com.packtpub.libgdx.bludbourne.components;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.utils.Json;
 import com.packtpub.libgdx.bludbourne.Entity;
 import com.packtpub.libgdx.bludbourne.components.Component;
@@ -15,6 +17,7 @@ public abstract class InputComponent implements Component {
     protected Entity.Direction _currentDirection = Entity.Direction.LEFT;
     protected Entity.State _currentState = null;
     protected Json _json;
+    protected InputMultiplexer _inputMultiplexer;
 
     protected enum Keys {
         LEFT, RIGHT, UP, DOWN, QUIT
@@ -43,6 +46,8 @@ public abstract class InputComponent implements Component {
 
     InputComponent(){
         _json = new Json();
+        _inputMultiplexer = new InputMultiplexer();
+        Gdx.input.setInputProcessor(_inputMultiplexer);
     }
 
     public abstract void update(Entity entity, float delta);
