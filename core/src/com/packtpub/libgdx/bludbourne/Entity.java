@@ -158,7 +158,7 @@ public class Entity {
 
     public boolean isGettingTyped(){
         if(_graphicsComponent instanceof TypeableGraphicsComponent){
-            if(!((TypeableGraphicsComponent)_graphicsComponent).get_wordAndLetterToType().isEmpty()){
+            if(!((TypeableGraphicsComponent)_graphicsComponent).getWrapperWordAndLetterToType().getWordAndLetterToType().isEmpty()){
                 return true;
             }
         }

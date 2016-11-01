@@ -66,6 +66,7 @@ public abstract class InputComponent implements Component {
     public void removeInputProcessor(InputProcessor inputProcessor){
         Gdx.input.setInputProcessor(null);
         _globalMultiplexer.getInputMultiplexer().removeProcessor(inputProcessor);
+        Gdx.input.setInputProcessor(_globalMultiplexer.getInputMultiplexer());
     }
 
     public abstract void update(Entity entity, float delta);

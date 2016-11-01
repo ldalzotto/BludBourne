@@ -39,24 +39,24 @@ public class TypeableGraphicsComponent extends GraphicsComponent {
     BitmapFont _typeFont;
 
     private float _typingBoxWidth;
-    private HashMap<String, Boolean> _wordAndLetterToType;
+    private WrapperWordAndLetterToType _wrapperWordAndLetterToType;
 
     public enum TYPE_SUBJECT {
         FOOD, NATURE
     }
 
-    public HashMap<String, Boolean> get_wordAndLetterToType() {
-        return _wordAndLetterToType;
+    public WrapperWordAndLetterToType getWrapperWordAndLetterToType() {
+        return _wrapperWordAndLetterToType;
     }
 
-    public void set_wordAndLetterToType(HashMap<String, Boolean> _wordAndLetterToType) {
-        this._wordAndLetterToType = _wordAndLetterToType;
+    public void setWrapperWordAndLetterToType(WrapperWordAndLetterToType _wrapperWordAndLetterToType) {
+        this._wrapperWordAndLetterToType = _wrapperWordAndLetterToType;
     }
 
     public TypeableGraphicsComponent(){
         _typeFont = new BitmapFont();
         _typeFont.getData().setScale(0.1f, 0.1f);
-        _wordAndLetterToType = new HashMap<String, Boolean>();
+        _wrapperWordAndLetterToType = new WrapperWordAndLetterToType();
     }
 
     @Override
@@ -124,7 +124,7 @@ public class TypeableGraphicsComponent extends GraphicsComponent {
                             typingBox.getTextureWidth(), typingBox.getTextureHeight());
                 }
             } else if(string[0].equalsIgnoreCase(MESSAGE.TYPING_LETTER_FOUND.toString())){
-                _wordAndLetterToType = _json.fromJson(HashMap.class, string[1]);
+                _wrapperWordAndLetterToType = _json.fromJson(WrapperWordAndLetterToType.class, string[1]);
             }
         }
     }
@@ -136,7 +136,7 @@ public class TypeableGraphicsComponent extends GraphicsComponent {
             batch.begin();
             _wordToType = getRandomWord(TYPE_SUBJECT.NATURE);
             drawTypingBox(batch, entity);
-            if(_wordAndLetterToType.isEmpty()) {
+            if(_wrapperWordAndLetterToType.getWordAndLetterToType().isEmpty()) {
                 initTypingWordLogic(entity);
             }
             batch.end();
@@ -179,11 +179,18 @@ public class TypeableGraphicsComponent extends GraphicsComponent {
     }
 
     private void initTypingWordLogic(Entity entity){
-        _wordAndLetterToType.put(_wordToType, Boolean.FALSE);
+        HashMap<String, Boolean> wordToTypeValue = new HashMap<String, Boolean>();
+        wordToTypeValue.put(_wordToType, Boolean.FALSE);
+
+        _wrapperWordAndLetterToType.getWordAndLetterToType().put(String.valueOf(0), wordToTypeValue);
+
         for (int i = 0; i < _wordToType.length(); i++){
-            _wordAndLetterToType.put(String.valueOf(_wordToType.charAt(i)), Boolean.FALSE);
+            HashMap<String, Boolean> letterToTypeValue = new HashMap<String, Boolean>();
+            letterToTypeValue.put(String.valueOf(_wordToType.charAt(i)), Boolean.FALSE);
+            _wrapperWordAndLetterToType.getWordAndLetterToType().put(String.valueOf(i+1), letterToTypeValue);
         }
-        entity.sendMessage(MESSAGE.TYPING_WORD_INIT, _json.toJson(_wordAndLetterToType));
+
+        entity.sendMessage(MESSAGE.TYPING_WORD_INIT, _json.toJson(_wrapperWordAndLetterToType));
     }
 
 }

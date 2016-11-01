@@ -1,28 +1,34 @@
 package com.packtpub.libgdx.bludbourne.components.comTypeable;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.utils.JsonValue;
 import com.packtpub.libgdx.bludbourne.Entity;
 import com.packtpub.libgdx.bludbourne.components.comAbstract.InputComponent;
 import com.packtpub.libgdx.bludbourne.components.comInterface.Component;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by ldalzotto on 31/10/2016.
  */
 public class TypeableInputComponent extends InputComponent implements InputProcessor {
 
+    private static final String TAG = TypeableInputComponent.class.getSimpleName();
+
     private String _typingWord;
-    private HashMap<String, Boolean> _wordAndLetterToType;
+    private WrapperWordAndLetterToType _wrapperWordAndLetterToType;
 
     private boolean _letterFound;
 
     public TypeableInputComponent(){
         _typingWord = "";
         _letterFound = false;
-        _wordAndLetterToType = new HashMap<String, Boolean>();
+        _wrapperWordAndLetterToType = new WrapperWordAndLetterToType();
     }
 
     @Override
@@ -38,13 +44,18 @@ public class TypeableInputComponent extends InputComponent implements InputProce
             return;
         }
 
+        if(string.length == 1){
+            if(string[0].equalsIgnoreCase(MESSAGE.ENTITY_DESELECTED.toString())){
+                removeInputProcessor(this);
+                _wrapperWordAndLetterToType.getWordAndLetterToType().clear();
+            }
+        }
+
         if(string.length == 2){
             if(string[0].equalsIgnoreCase(MESSAGE.TYPING_WORD_INIT.toString())){
                 addInputProcessor(this, 0);
-                _wordAndLetterToType = _json.fromJson(HashMap.class, string[1]);
-            } else if(string[0].equalsIgnoreCase(MESSAGE.ENTITY_DESELECTED.toString())){
-                removeInputProcessor(this);
-                _wordAndLetterToType.clear();
+                _wrapperWordAndLetterToType = _json.fromJson(WrapperWordAndLetterToType.class, string[1]);
+
             }
         }
     }
@@ -53,7 +64,7 @@ public class TypeableInputComponent extends InputComponent implements InputProce
     public void update(Entity entity, float delta) {
 
         if(_letterFound){
-            entity.sendMessage(MESSAGE.TYPING_LETTER_FOUND, _json.toJson(_wordAndLetterToType));
+            entity.sendMessage(MESSAGE.TYPING_LETTER_FOUND, _json.toJson(_wrapperWordAndLetterToType));
             _letterFound = false;
         }
 
@@ -62,15 +73,28 @@ public class TypeableInputComponent extends InputComponent implements InputProce
     @Override
     public boolean keyDown(int keycode) {
 
-        if(!_wordAndLetterToType.isEmpty()) {
+        if(!_wrapperWordAndLetterToType.getWordAndLetterToType().isEmpty()) {
+            String letterThatPlayerHaveToType = "";
+            String keyOfLetterThatPlayerHaveToType = null;
+
+            Integer wordLength = _wrapperWordAndLetterToType.getWordAndLetterToType().get(String.valueOf(0)).entrySet().iterator().next().getKey().length();
+
+            for(int i = 1; i <= wordLength ; i++){
+                if(!_wrapperWordAndLetterToType.getWordAndLetterToType().get(String.valueOf(i)).entrySet().iterator().next().getValue()){
+                    letterThatPlayerHaveToType = _wrapperWordAndLetterToType.getWordAndLetterToType().get(String.valueOf(i)).entrySet().iterator().next().getKey();
+                    keyOfLetterThatPlayerHaveToType = String.valueOf(i);
+                    break;
+                }
+            }
+
+            //TODO rendre ceci générique
             if (keycode == Input.Keys.T) {
-                Iterator<String> keys = _wordAndLetterToType.keySet().iterator();
-                while (keys.hasNext()) {
-                    String letter = keys.next();
-                    if (letter.length() == 1 && letter.equalsIgnoreCase("t") && !_wordAndLetterToType.get(letter)) {
-                        _wordAndLetterToType.put(letter, Boolean.TRUE);
-                        _letterFound = true;
-                    }
+                if(letterThatPlayerHaveToType.equalsIgnoreCase("t") && keyOfLetterThatPlayerHaveToType != null){
+                    HashMap<String, Boolean> setValueToTrue = new HashMap<String, Boolean>();
+                    setValueToTrue.put("t", Boolean.TRUE);
+                    _wrapperWordAndLetterToType.getWordAndLetterToType().put(String.valueOf(keyOfLetterThatPlayerHaveToType),
+                            setValueToTrue);
+                    _letterFound = true;
                 }
                 return true;
             }
