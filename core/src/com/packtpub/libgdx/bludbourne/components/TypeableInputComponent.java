@@ -39,7 +39,11 @@ public class TypeableInputComponent extends InputComponent implements InputProce
 
         if(string.length == 2){
             if(string[0].equalsIgnoreCase(MESSAGE.TYPING_WORD_INIT.toString())){
+                addInputProcessor(this, 0);
                 _wordAndLetterToType = _json.fromJson(HashMap.class, string[1]);
+            } else if(string[0].equalsIgnoreCase(MESSAGE.ENTITY_DESELECTED.toString())){
+                removeInputProcessor(this);
+                _wordAndLetterToType.clear();
             }
         }
     }
@@ -56,6 +60,20 @@ public class TypeableInputComponent extends InputComponent implements InputProce
 
     @Override
     public boolean keyDown(int keycode) {
+
+        if(!_wordAndLetterToType.isEmpty()) {
+            if (keycode == Input.Keys.T) {
+                Iterator<String> keys = _wordAndLetterToType.keySet().iterator();
+                while (keys.hasNext()) {
+                    String letter = keys.next();
+                    if (letter.length() == 1 && letter.equalsIgnoreCase("t") && !_wordAndLetterToType.get(letter)) {
+                        _wordAndLetterToType.put(letter, Boolean.TRUE);
+                        _letterFound = true;
+                    }
+                }
+                return true;
+            }
+        }
         return false;
     }
 

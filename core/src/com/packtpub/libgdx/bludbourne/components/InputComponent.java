@@ -2,9 +2,11 @@ package com.packtpub.libgdx.bludbourne.components;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Json;
 import com.packtpub.libgdx.bludbourne.Entity;
 import com.packtpub.libgdx.bludbourne.components.Component;
+import com.packtpub.libgdx.bludbourne.multiplexer.GlobalMultiplexer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +19,7 @@ public abstract class InputComponent implements Component {
     protected Entity.Direction _currentDirection = Entity.Direction.LEFT;
     protected Entity.State _currentState = null;
     protected Json _json;
-    protected InputMultiplexer _inputMultiplexer;
+    protected GlobalMultiplexer _globalMultiplexer;
 
     protected enum Keys {
         LEFT, RIGHT, UP, DOWN, QUIT
@@ -46,8 +48,25 @@ public abstract class InputComponent implements Component {
 
     InputComponent(){
         _json = new Json();
-        _inputMultiplexer = new InputMultiplexer();
-        Gdx.input.setInputProcessor(_inputMultiplexer);
+        _globalMultiplexer = GlobalMultiplexer.getInstance();
+        Gdx.input.setInputProcessor(_globalMultiplexer.getInputMultiplexer());
+    }
+
+    public void addInputProcessor(InputProcessor inputProcessor){
+        Gdx.input.setInputProcessor(null);
+        _globalMultiplexer.getInputMultiplexer().addProcessor(inputProcessor);
+        Gdx.input.setInputProcessor(_globalMultiplexer.getInputMultiplexer());
+    }
+
+    public void addInputProcessor(InputProcessor inputProcessor, int index){
+        Gdx.input.setInputProcessor(null);
+        _globalMultiplexer.getInputMultiplexer().addProcessor(index, inputProcessor);
+        Gdx.input.setInputProcessor(_globalMultiplexer.getInputMultiplexer());
+    }
+
+    public void removeInputProcessor(InputProcessor inputProcessor){
+        Gdx.input.setInputProcessor(null);
+        _globalMultiplexer.getInputMultiplexer().removeProcessor(inputProcessor);
     }
 
     public abstract void update(Entity entity, float delta);

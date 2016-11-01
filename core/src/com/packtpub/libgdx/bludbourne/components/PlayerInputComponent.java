@@ -17,17 +17,9 @@ public class PlayerInputComponent extends InputComponent implements InputProcess
     public final static String TAG = PlayerInputComponent.class.getSimpleName();
     private Vector3 _lastMouseCoordinates;
 
-    private String _typingWord;
-    private HashMap<String, Boolean> _wordAndLetterToType;
-
-    private boolean _letterFound;
-
     public PlayerInputComponent(){
         this._lastMouseCoordinates = new Vector3();
-        _typingWord = "";
-        _letterFound = false;
-        _wordAndLetterToType = new HashMap<String, Boolean>();
-        _inputMultiplexer.addProcessor(this);
+        _globalMultiplexer.getInputMultiplexer().addProcessor(this);
         //Gdx.input.setInputProcessor(this);
     }
 
@@ -49,8 +41,6 @@ public class PlayerInputComponent extends InputComponent implements InputProcess
             if(string[0].equalsIgnoreCase(MESSAGE.CURRENT_DIRECTION.toString())){
                 //Gdx.app.debug(TAG, "Current Direction message received : " + message);
                 _currentDirection = _json.fromJson(Entity.Direction.class, string[1]);
-            } else if(string[0].equalsIgnoreCase(MESSAGE.TYPING_WORD_INIT.toString())){
-                _wordAndLetterToType = _json.fromJson(HashMap.class, string[1]);
             }
         }
     }
@@ -82,11 +72,6 @@ public class PlayerInputComponent extends InputComponent implements InputProcess
             entity.sendMessage(MESSAGE.INIT_SELECT_ENTITY, _json.toJson(_lastMouseCoordinates));
             mouseButtons.put(Mouse.SELECT, false);
         }
-
-        if(_letterFound){
-            entity.sendMessage(MESSAGE.TYPING_LETTER_FOUND, _json.toJson(_wordAndLetterToType));
-            _letterFound = false;
-        }
     }
 
     @Override
@@ -110,20 +95,6 @@ public class PlayerInputComponent extends InputComponent implements InputProcess
         if( keycode == Input.Keys.ESCAPE){
             this.quitPressed();
             return true;
-        }
-
-        if(!_wordAndLetterToType.isEmpty()) {
-            if (keycode == Input.Keys.T) {
-                Iterator<String> keys = _wordAndLetterToType.keySet().iterator();
-                while (keys.hasNext()) {
-                    String letter = keys.next();
-                    if (letter.length() == 1 && letter.equalsIgnoreCase("t") && !_wordAndLetterToType.get(letter)) {
-                        _wordAndLetterToType.put(letter, Boolean.TRUE);
-                        _letterFound = true;
-                    }
-                }
-                return true;
-            }
         }
 
         return false;

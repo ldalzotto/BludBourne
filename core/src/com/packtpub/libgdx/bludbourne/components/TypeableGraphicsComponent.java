@@ -140,7 +140,7 @@ public class TypeableGraphicsComponent extends GraphicsComponent {
             _wordToType = getRandomWord(TYPE_SUBJECT.NATURE);
             drawTypingBox(batch, entity);
             if(_wordAndLetterToType.isEmpty()) {
-                initTypingWordLogic(entity, mapManager);
+                initTypingWordLogic(entity);
             }
         }
         batch.end();
@@ -177,12 +177,12 @@ public class TypeableGraphicsComponent extends GraphicsComponent {
         }
     }
 
-    private void initTypingWordLogic(Entity entity, MapManager mapManager){
+    private void initTypingWordLogic(Entity entity){
         _wordAndLetterToType.put(_wordToType, Boolean.FALSE);
         for (int i = 0; i < _wordToType.length(); i++){
             _wordAndLetterToType.put(String.valueOf(_wordToType.charAt(i)), Boolean.FALSE);
         }
-        mapManager.getPlayer().sendMessage(MESSAGE.TYPING_WORD_INIT, _json.toJson(_wordAndLetterToType));
+        entity.sendMessage(MESSAGE.TYPING_WORD_INIT, _json.toJson(_wordAndLetterToType));
     }
 
 }
