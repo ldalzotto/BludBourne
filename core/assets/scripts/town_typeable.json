@@ -6,8 +6,8 @@
   {
       texturePath: sprites/gui/10_basic_message_boxes_by_CharlesGabriel.png
       gridPoint: {
-        x: 0
-        y: 4
+        x: 1
+        y: 5
       }
       textureHeight: 100
       textureWidth: 480
@@ -41,26 +41,6 @@
         }
 
         {
-          x: 1
-          y: 1
-        }
-
-        {
-          x: 1
-          y: 2
-        }
-
-        {
-          x: 1
-          y: 3
-        }
-
-        {
-          x: 1
-          y: 4
-        }
-
-        {
           x: 2
           y: 1
         }
@@ -81,12 +61,32 @@
         }
 
         {
-          x: 3
+          x: 4
           y: 1
         }
 
         {
-          x: 3
+          x: 4
+          y: 2
+        }
+
+        {
+          x: 4
+          y: 3
+        }
+
+        {
+          x: 4
+          y: 4
+        }
+
+        {
+          x: 6
+          y: 1
+        }
+
+        {
+          x: 6
           y: 2
         }
 
