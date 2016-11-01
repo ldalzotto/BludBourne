@@ -1,4 +1,4 @@
-package com.packtpub.libgdx.bludbourne.components;
+package com.packtpub.libgdx.bludbourne.components.comAbstract;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.packtpub.libgdx.bludbourne.Entity;
+import com.packtpub.libgdx.bludbourne.components.comInterface.Component;
 import com.packtpub.libgdx.bludbourne.map.MapManager;
 import com.packtpub.libgdx.bludbourne.Utility;
 

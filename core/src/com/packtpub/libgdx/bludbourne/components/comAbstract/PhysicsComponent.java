@@ -1,4 +1,4 @@
-package com.packtpub.libgdx.bludbourne.components;
+package com.packtpub.libgdx.bludbourne.components.comAbstract;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapLayer;
@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.packtpub.libgdx.bludbourne.Entity;
+import com.packtpub.libgdx.bludbourne.components.comInterface.Component;
 import com.packtpub.libgdx.bludbourne.map.Map;
 import com.packtpub.libgdx.bludbourne.map.MapManager;
 
@@ -40,7 +41,7 @@ public abstract class PhysicsComponent implements Component {
         BOTTOM_LEFT, BOTTOM_CENTER, CENTER
     }
 
-    PhysicsComponent(){
+    protected PhysicsComponent(){
         this._nextEntityPosition = new Vector2();
         this._currentEntityPosition = new Vector2();
         this._boundingBox = new Rectangle();

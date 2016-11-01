@@ -1,4 +1,4 @@
-package com.packtpub.libgdx.bludbourne.components;
+package com.packtpub.libgdx.bludbourne.components.comNPC;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
@@ -12,6 +12,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.packtpub.libgdx.bludbourne.*;
+import com.packtpub.libgdx.bludbourne.components.comAbstract.GraphicsComponent;
+import com.packtpub.libgdx.bludbourne.components.comInterface.Component;
 import com.packtpub.libgdx.bludbourne.map.Map;
 import com.packtpub.libgdx.bludbourne.map.MapManager;
 
@@ -22,10 +24,10 @@ public class NPCGraphicsComponent extends GraphicsComponent {
 
     private static final String TAG = NPCGraphicsComponent.class.getSimpleName();
 
-    private boolean _isSelected = false;
+    private boolean _isSelected;
 
     public NPCGraphicsComponent(){
-
+        _isSelected = false;
     }
 
     @Override

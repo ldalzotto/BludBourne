@@ -1,7 +1,9 @@
-package com.packtpub.libgdx.bludbourne.components;
+package com.packtpub.libgdx.bludbourne.components.comNPC;
 
 import com.badlogic.gdx.math.Vector2;
 import com.packtpub.libgdx.bludbourne.Entity;
+import com.packtpub.libgdx.bludbourne.components.comAbstract.PhysicsComponent;
+import com.packtpub.libgdx.bludbourne.components.comInterface.Component;
 import com.packtpub.libgdx.bludbourne.map.MapManager;
 
 /**

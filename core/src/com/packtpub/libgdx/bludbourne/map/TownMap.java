@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.packtpub.libgdx.bludbourne.Entity;
 import com.packtpub.libgdx.bludbourne.EntityConfig;
 import com.packtpub.libgdx.bludbourne.EntityFactory;
-import com.packtpub.libgdx.bludbourne.components.Component;
+import com.packtpub.libgdx.bludbourne.components.comInterface.Component;
 
 /**
  * Created by ldalzotto on 31/10/2016.
@@ -37,11 +37,20 @@ public class TownMap extends Map {
 
         _typeablePositions = getTypeablePositions(_mapTypeableLayer);
 
+        int counter = 0;
         for(Vector2 position: _npcStartPositions){
-            _mapEntities.add(initEntity(Entity.getEntityConfig(_townGuardWalking), position));
+            EntityConfig entityConfig = Entity.getEntityConfig(_townGuardWalking);
+            entityConfig.setEntityID(entityConfig.getEntityID() + String.valueOf(counter));
+            _mapEntities.add(initEntity(entityConfig, position));
+            counter ++;
         }
+
+        counter = 0;
         for(Vector2 position: _typeablePositions){
-            _mapEntities.add(initEntity(Entity.getEntityConfig(_townTypeable), position));
+            EntityConfig entityConfig = Entity.getEntityConfig(_townTypeable);
+            entityConfig.setEntityID(entityConfig.getEntityID() + String.valueOf(counter));
+            _mapEntities.add(initEntity(entityConfig, position));
+            counter ++;
         }
 
         //SPecial cases

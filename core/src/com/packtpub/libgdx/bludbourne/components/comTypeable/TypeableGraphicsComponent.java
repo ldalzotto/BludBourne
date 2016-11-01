@@ -1,9 +1,7 @@
-package com.packtpub.libgdx.bludbourne.components;
+package com.packtpub.libgdx.bludbourne.components.comTypeable;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -17,10 +15,11 @@ import com.badlogic.gdx.utils.Array;
 import com.packtpub.libgdx.bludbourne.Entity;
 import com.packtpub.libgdx.bludbourne.EntityConfig;
 import com.packtpub.libgdx.bludbourne.Utility;
+import com.packtpub.libgdx.bludbourne.components.comAbstract.GraphicsComponent;
+import com.packtpub.libgdx.bludbourne.components.comInterface.Component;
 import com.packtpub.libgdx.bludbourne.map.Map;
 import com.packtpub.libgdx.bludbourne.map.MapManager;
 
-import java.io.StringReader;
 import java.util.HashMap;
 
 /**
@@ -133,16 +132,18 @@ public class TypeableGraphicsComponent extends GraphicsComponent {
     @Override
     public void update(Entity entity, MapManager mapManager, Batch batch, float delta) {
         updateAnimations(delta);
-
-        batch.begin();
-        batch.draw(_currentFrame, _currentPosition.x, _currentPosition.y, 1, 1);
         if(_isSelected){
+            batch.begin();
             _wordToType = getRandomWord(TYPE_SUBJECT.NATURE);
             drawTypingBox(batch, entity);
             if(_wordAndLetterToType.isEmpty()) {
                 initTypingWordLogic(entity);
             }
+            batch.end();
         }
+
+        batch.begin();
+        batch.draw(_currentFrame, _currentPosition.x, _currentPosition.y, 1, 1);
         batch.end();
 
         //Used to graphically debug boundingboxes

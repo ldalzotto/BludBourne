@@ -1,4 +1,4 @@
-package com.packtpub.libgdx.bludbourne.components;
+package com.packtpub.libgdx.bludbourne.components.comInterface;
 
 /**
  * Created by ldalzotto on 30/10/2016.

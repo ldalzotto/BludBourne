@@ -1,7 +1,8 @@
-package com.packtpub.libgdx.bludbourne.components;
+package com.packtpub.libgdx.bludbourne.components.comNPC;
 
 import com.badlogic.gdx.InputProcessor;
 import com.packtpub.libgdx.bludbourne.Entity;
+import com.packtpub.libgdx.bludbourne.components.comAbstract.InputComponent;
 
 /**
  * Created by ldalzotto on 31/10/2016.

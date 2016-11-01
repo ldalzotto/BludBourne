@@ -1,9 +1,10 @@
-package com.packtpub.libgdx.bludbourne.components;
+package com.packtpub.libgdx.bludbourne.components.comTypeable;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.packtpub.libgdx.bludbourne.Entity;
+import com.packtpub.libgdx.bludbourne.components.comAbstract.InputComponent;
+import com.packtpub.libgdx.bludbourne.components.comInterface.Component;
 
 import java.util.HashMap;
 import java.util.Iterator;

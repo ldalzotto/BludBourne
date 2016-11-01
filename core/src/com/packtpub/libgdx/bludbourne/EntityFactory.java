@@ -1,7 +1,15 @@
 package com.packtpub.libgdx.bludbourne;
 
 import com.badlogic.gdx.utils.Json;
-import com.packtpub.libgdx.bludbourne.components.*;
+import com.packtpub.libgdx.bludbourne.components.comInterface.Component;
+import com.packtpub.libgdx.bludbourne.components.comNPC.NPCGraphicsComponent;
+import com.packtpub.libgdx.bludbourne.components.comNPC.NPCInputComponent;
+import com.packtpub.libgdx.bludbourne.components.comNPC.NPCPhysicsComponent;
+import com.packtpub.libgdx.bludbourne.components.comPlayer.PlayerGraphicsComponent;
+import com.packtpub.libgdx.bludbourne.components.comPlayer.PlayerInputComponent;
+import com.packtpub.libgdx.bludbourne.components.comPlayer.PlayerPhysicsComponent;
+import com.packtpub.libgdx.bludbourne.components.comTypeable.TypeableGraphicsComponent;
+import com.packtpub.libgdx.bludbourne.components.comTypeable.TypeableInputComponent;
 
 
 /**

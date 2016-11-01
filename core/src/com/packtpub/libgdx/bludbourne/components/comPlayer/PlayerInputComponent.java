@@ -1,13 +1,11 @@
-package com.packtpub.libgdx.bludbourne.components;
+package com.packtpub.libgdx.bludbourne.components.comPlayer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector3;
 import com.packtpub.libgdx.bludbourne.Entity;
-
-import java.util.HashMap;
-import java.util.Iterator;
+import com.packtpub.libgdx.bludbourne.components.comAbstract.InputComponent;
 
 /**
  * Created by ldalzotto on 30/10/2016.

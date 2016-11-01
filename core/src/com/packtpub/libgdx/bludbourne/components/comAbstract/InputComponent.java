@@ -1,11 +1,10 @@
-package com.packtpub.libgdx.bludbourne.components;
+package com.packtpub.libgdx.bludbourne.components.comAbstract;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Json;
 import com.packtpub.libgdx.bludbourne.Entity;
-import com.packtpub.libgdx.bludbourne.components.Component;
+import com.packtpub.libgdx.bludbourne.components.comInterface.Component;
 import com.packtpub.libgdx.bludbourne.multiplexer.GlobalMultiplexer;
 
 import java.util.HashMap;
@@ -25,7 +24,7 @@ public abstract class InputComponent implements Component {
         LEFT, RIGHT, UP, DOWN, QUIT
     }
 
-    enum Mouse {
+    protected enum Mouse {
         SELECT, DOACTION
     }
 
@@ -46,7 +45,7 @@ public abstract class InputComponent implements Component {
         mouseButtons.put(Mouse.SELECT, false);
     }
 
-    InputComponent(){
+    protected InputComponent(){
         _json = new Json();
         _globalMultiplexer = GlobalMultiplexer.getInstance();
         Gdx.input.setInputProcessor(_globalMultiplexer.getInputMultiplexer());

@@ -7,7 +7,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
-import com.packtpub.libgdx.bludbourne.components.*;
+import com.packtpub.libgdx.bludbourne.components.comAbstract.GraphicsComponent;
+import com.packtpub.libgdx.bludbourne.components.comAbstract.InputComponent;
+import com.packtpub.libgdx.bludbourne.components.comAbstract.PhysicsComponent;
+import com.packtpub.libgdx.bludbourne.components.comInterface.Component;
+import com.packtpub.libgdx.bludbourne.components.comTypeable.TypeableGraphicsComponent;
 import com.packtpub.libgdx.bludbourne.map.MapManager;
 
 import java.util.ArrayList;

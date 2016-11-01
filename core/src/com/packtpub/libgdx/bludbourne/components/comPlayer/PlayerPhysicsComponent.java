@@ -1,4 +1,4 @@
-package com.packtpub.libgdx.bludbourne.components;
+package com.packtpub.libgdx.bludbourne.components.comPlayer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
@@ -11,6 +11,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.utils.Array;
 import com.packtpub.libgdx.bludbourne.Entity;
+import com.packtpub.libgdx.bludbourne.components.comAbstract.PhysicsComponent;
+import com.packtpub.libgdx.bludbourne.components.comInterface.Component;
 import com.packtpub.libgdx.bludbourne.map.Map;
 import com.packtpub.libgdx.bludbourne.map.MapFactory;
 import com.packtpub.libgdx.bludbourne.map.MapManager;
@@ -21,7 +23,7 @@ import java.util.Hashtable;
 /**
  * Created by ldalzotto on 30/10/2016.
  */
-public class PlayerPhysicsComponent extends PhysicsComponent{
+public class PlayerPhysicsComponent extends PhysicsComponent {
 
     private static final String TAG = PlayerPhysicsComponent.class.getSimpleName();
 
@@ -120,8 +122,8 @@ public class PlayerPhysicsComponent extends PhysicsComponent{
                             mapEntity.getCurrentBoundingBox().getCenter(entityPosition);
                             entityPosition.scl(Map.UNIT_SCALE);
                             if(_currentEntityPosition.dst(entityPosition) >= _selectRayMaximumDistance*Map.UNIT_SCALE){
-                                mapEntity.sendMessage(MESSAGE.ENTITY_DESELECTED);
                                 _selectedEntity.remove(mapEntity.getEntityConfig().getEntityID());
+                                mapEntity.sendMessage(MESSAGE.ENTITY_DESELECTED);
                             }
                         }
                     }

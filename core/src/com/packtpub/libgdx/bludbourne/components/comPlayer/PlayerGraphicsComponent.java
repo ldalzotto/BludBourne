@@ -1,4 +1,4 @@
-package com.packtpub.libgdx.bludbourne.components;
+package com.packtpub.libgdx.bludbourne.components.comPlayer;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -11,10 +11,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.packtpub.libgdx.bludbourne.Entity;
 import com.packtpub.libgdx.bludbourne.EntityConfig;
+import com.packtpub.libgdx.bludbourne.components.comAbstract.GraphicsComponent;
 import com.packtpub.libgdx.bludbourne.map.Map;
 import com.packtpub.libgdx.bludbourne.map.MapManager;
-
-import java.util.HashMap;
 
 /**
  * Created by ldalzotto on 30/10/2016.
