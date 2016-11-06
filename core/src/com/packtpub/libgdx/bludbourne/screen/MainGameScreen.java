@@ -8,8 +8,10 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Json;
 import com.packtpub.libgdx.bludbourne.*;
 import com.packtpub.libgdx.bludbourne.components.comInterface.Component;
+import com.packtpub.libgdx.bludbourne.gui.PlayerHUD;
 import com.packtpub.libgdx.bludbourne.map.Map;
 import com.packtpub.libgdx.bludbourne.map.MapManager;
+import com.packtpub.libgdx.bludbourne.multiplexer.GlobalMultiplexer;
 
 /**
  * Created by ldalzotto on 29/10/2016.
@@ -17,6 +19,9 @@ import com.packtpub.libgdx.bludbourne.map.MapManager;
 public class MainGameScreen implements Screen {
 
     private static final String TAG = MainGameScreen.class.getSimpleName();
+
+    private OrthographicCamera _hudCamera = null;
+    private static PlayerHUD _playerHud;
 
     private static class VIEWPORT {
         static float viewportWidth;
@@ -45,6 +50,16 @@ public class MainGameScreen implements Screen {
         //_camera setup
         setupViewport(10,10);
 
+        _hudCamera = new OrthographicCamera();
+        _hudCamera.setToOrtho(false, VIEWPORT.physicalWidth, VIEWPORT.physicalHeight);
+
+        _player = EntityFactory.getEntity(EntityFactory.EntityType.PLAYER);
+        _playerHud = new PlayerHUD(_hudCamera, _player);
+
+        Gdx.input.setInputProcessor(null);
+        GlobalMultiplexer.getInstance().getInputMultiplexer().addProcessor(0, _playerHud.get_stage());
+        Gdx.input.setInputProcessor(GlobalMultiplexer.getInstance().getInputMultiplexer());
+
         //get the current size
         _camera = new OrthographicCamera();
         _camera.setToOrtho(false, VIEWPORT.viewportWidth, VIEWPORT.viewportHeight);
@@ -56,7 +71,6 @@ public class MainGameScreen implements Screen {
 
         Gdx.app.debug(TAG, "UnitScale value is: " + _mapRenderer.getUnitScale());
 
-        _player = EntityFactory.getEntity(EntityFactory.EntityType.PLAYER);
         _mapMgr.setPlayer(_player);
     }
 
@@ -85,6 +99,7 @@ public class MainGameScreen implements Screen {
         _mapMgr.updateCurrentMapEntities(_mapMgr, _mapRenderer.getBatch(), delta);
         _player.update(_mapMgr, _mapRenderer.getBatch(), delta);
 
+        _playerHud.render(delta);
     }
 
     @Override
