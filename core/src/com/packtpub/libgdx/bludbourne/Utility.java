@@ -24,11 +24,15 @@ public class Utility {
     private final static String STATUSUI_SKIN_PATH = "skins/statusui.json";
 
     private final static String ITEMS_TEXTURE_ATLAS_PATH = "skins/items.atlas";
-    private final static String ITEMS_SKIN_PATH = "skins/items.json";
+
+    private final static String MAIN_MENU_TEXTURE_ATLAS_PATH = "skins/main_menu_screen.atlas";
+    private final static String MAIN_MENU_SKIN_PATH = "skins/main_menu_screen.json";
 
     public static TextureAtlas STATUSUI_TEXTUREATLAS = new TextureAtlas(Gdx.files.internal(STATUSUI_TEXTURE_ATLAS_PATH));
     public static Skin STATUSUI_SKIN = new Skin(Gdx.files.internal(STATUSUI_SKIN_PATH), STATUSUI_TEXTUREATLAS);
     public static TextureAtlas ITEMS_TEXTUREATLAS = new TextureAtlas(Gdx.files.internal(ITEMS_TEXTURE_ATLAS_PATH));
+    public static TextureAtlas MAIN_MENU_TEXTUREATLAS = new TextureAtlas(Gdx.files.internal(MAIN_MENU_TEXTURE_ATLAS_PATH));
+    public static Skin MAINMENU_SKIN = new Skin(Gdx.files.internal(MAIN_MENU_SKIN_PATH), MAIN_MENU_TEXTUREATLAS);
 
     //Once the asset manager is done loading
     public static void unloadAsset (String assetFilenamePath) {

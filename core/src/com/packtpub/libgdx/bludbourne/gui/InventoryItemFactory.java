@@ -2,11 +2,13 @@ package com.packtpub.libgdx.bludbourne.gui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.Scaling;
 import com.packtpub.libgdx.bludbourne.Utility;
 import com.packtpub.libgdx.bludbourne.gui.actor.InventoryItem;
+import com.packtpub.libgdx.bludbourne.gui.actor.InventoryItemLocation;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -45,6 +47,19 @@ public class InventoryItemFactory {
         item.setDrawable(new TextureRegionDrawable(Utility.ITEMS_TEXTUREATLAS.findRegion(item.getItemTypeID().toString())));
         item.setScaling(Scaling.none);
         return item;
+    }
+
+    public Array<InventoryItemLocation> getInitInventory(){
+        ArrayList<JsonValue> list = _json.fromJson(ArrayList.class, Gdx.files.internal(INVENTORY_ITEM));
+        Array<InventoryItemLocation> locationList = new Array<InventoryItemLocation>();
+        int counter = 0;
+        for (JsonValue jsonValue:
+             list) {
+            InventoryItem inventoryItem = _json.readValue(InventoryItem.class, jsonValue);
+            locationList.add(new InventoryItemLocation(counter, inventoryItem.getItemTypeID().toString(), 1));
+            counter ++;
+        }
+        return locationList;
     }
 
 }

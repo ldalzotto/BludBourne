@@ -12,26 +12,19 @@ import com.packtpub.libgdx.bludbourne.gui.PlayerHUD;
 import com.packtpub.libgdx.bludbourne.map.Map;
 import com.packtpub.libgdx.bludbourne.map.MapManager;
 import com.packtpub.libgdx.bludbourne.multiplexer.GlobalMultiplexer;
+import com.packtpub.libgdx.bludbourne.screen.viewport.GlobalViewport;
 
 /**
  * Created by ldalzotto on 29/10/2016.
  */
-public class MainGameScreen implements Screen {
+public class MainGameScreen extends GlobalViewport implements Screen {
 
     private static final String TAG = MainGameScreen.class.getSimpleName();
 
     private OrthographicCamera _hudCamera = null;
     private static PlayerHUD _playerHud;
 
-    private static class VIEWPORT {
-        static float viewportWidth;
-        static float viewportHeight;
-        static float virtualWidth;
-        static float virtualHeight;
-        static float physicalWidth;
-        static float physicalHeight;
-        static float aspectRation;
-    }
+    private BludBourne _game;
 
     private OrthogonalTiledMapRenderer _mapRenderer = null;
     private OrthographicCamera _camera = null;
@@ -40,9 +33,10 @@ public class MainGameScreen implements Screen {
 
     private Entity _player;
 
-    public MainGameScreen() {
+    public MainGameScreen(BludBourne game) {
         _mapMgr = new MapManager();
         _json = new Json();
+        _game = game;
     }
 
     @Override
@@ -119,40 +113,10 @@ public class MainGameScreen implements Screen {
 
     @Override
     public void dispose() {
-        _player.dispose();
-        _mapRenderer.dispose();
-    }
-
-    private void setupViewport(int width, int height){
-        //Makethe viewport a percentage of the total display area
-        VIEWPORT.virtualWidth = width;
-        VIEWPORT.virtualHeight = height;
-
-        //Current viewport dimensions
-        VIEWPORT.viewportWidth = VIEWPORT.virtualWidth;
-        VIEWPORT.viewportHeight = VIEWPORT.virtualHeight;
-
-        //pixel dimensions of diplay
-        VIEWPORT.physicalWidth = Gdx.graphics.getWidth();
-        VIEWPORT.physicalHeight = Gdx.graphics.getHeight();
-
-        //aspect ratio for current viewport
-        VIEWPORT.aspectRation = (VIEWPORT.virtualWidth/VIEWPORT.virtualHeight);
-
-        //update viewport if there could be skewing
-        if(VIEWPORT.physicalWidth / VIEWPORT.physicalHeight >= VIEWPORT.aspectRation) {
-            //letterbox left and right
-            VIEWPORT.viewportWidth = VIEWPORT.viewportHeight * (VIEWPORT.physicalWidth / VIEWPORT.physicalHeight);
-            VIEWPORT.viewportHeight = VIEWPORT.virtualHeight;
-        } else {
-            //letterbox above and below
-            VIEWPORT.viewportWidth = VIEWPORT.virtualWidth;
-            VIEWPORT.viewportHeight = VIEWPORT.viewportWidth * (VIEWPORT.physicalHeight / VIEWPORT.physicalWidth);
+        if(_player != null && _mapRenderer != null){
+            _player.dispose();
+            _mapRenderer.dispose();
         }
-
-        Gdx.app.debug(TAG, "WorldRenderer: virtual: (" + VIEWPORT.virtualWidth + "," + VIEWPORT.virtualHeight + ")");
-        Gdx.app.debug(TAG, "WorldRenderer: viewport: (" + VIEWPORT.viewportWidth + "," + VIEWPORT.viewportHeight + ")");
-        Gdx.app.debug(TAG, "WorldRenderer: physical: (" + VIEWPORT.physicalWidth + "," + VIEWPORT.physicalHeight + ")");
-
     }
+
 }

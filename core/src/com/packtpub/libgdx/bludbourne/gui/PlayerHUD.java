@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.packtpub.libgdx.bludbourne.Entity;
@@ -49,6 +50,8 @@ public class PlayerHUD implements Screen {
         _inventoryUI.setVisible(false);
         _inventoryUI.setPosition(_viewport.getScreenHeight()/2,_viewport.getScreenWidth()/2);
 
+        populateInventory();
+
         _inventoryButtonObservable = InventoryButtonObservable.getInstance();
         _inventoryButtonObservable.addObserver(new InventoryButtonObserver(this));
 
@@ -57,9 +60,9 @@ public class PlayerHUD implements Screen {
 
     public void inventoryButtonClicked(boolean isInventoryButtonClicked){
         if(isInventoryButtonClicked){
-            _statusUI.setVisible(false);
             _inventoryUI.setVisible(true);
         } else {
+            _statusUI.closeInventoryButtonImage();
             _statusUI.setVisible(true);
             _inventoryUI.setVisible(false);
         }
@@ -103,5 +106,9 @@ public class PlayerHUD implements Screen {
 
     public Stage get_stage() {
         return _stage;
+    }
+
+    public void populateInventory(){
+        _inventoryUI.populateInventory(null, InventoryItemFactory.getInstance().getInitInventory());
     }
 }

@@ -109,4 +109,8 @@ public class StatusUI extends Window {
 
         this.pack();
     }
+
+    public void closeInventoryButtonImage(){
+        _inventoryButton.setChecked(false);
+    }
 }

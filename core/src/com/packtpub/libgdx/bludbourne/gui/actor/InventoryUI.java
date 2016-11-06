@@ -1,16 +1,18 @@
 package com.packtpub.libgdx.bludbourne.gui.actor;
 
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.packtpub.libgdx.bludbourne.Utility;
 import com.packtpub.libgdx.bludbourne.gui.InventoryItemFactory;
 import com.packtpub.libgdx.bludbourne.gui.actor.inventoryButton.InventoryButtonObservable;
+import com.packtpub.libgdx.bludbourne.gui.actor.inventoryButton.InventoryReturnButtonListener;
 
 /**
  * Created by ldalzotto on 05/11/2016.
@@ -96,6 +98,13 @@ public class InventoryUI extends Window {
         _dragAndDrop.addTarget(new InventorySlotTarget(rightArmSlot));
         _dragAndDrop.addTarget(new InventorySlotTarget(legsSlot));
 
+
+        //TODO à ne pas refaire
+        Utility.loadTextureAsset("sprites/gui/left_arrow_inventory.9.png");
+        NinePatch test = new NinePatch(new TextureRegion(Utility.getTextureAsset("sprites/gui/left_arrow_inventory.9.png")));
+        ImageButton returnButton = new ImageButton(new NinePatchDrawable(test));
+        returnButton.addListener(new InventoryReturnButtonListener(InventoryButtonObservable.getInstance()));
+
         //layout
         for(int i = 1; i <= _numSlots; i++){
             InventorySlot inventorySlot = new InventorySlot();
@@ -120,9 +129,11 @@ public class InventoryUI extends Window {
         _equipSlots.right().add(legsSlot).size(_slotWidth, _slotHeight);
 
         _playerSLotsTable.add(_equipSlots);
-
+        this.add(returnButton).align(Align.topLeft).size(30,30);
         this.add(_playerSLotsTable).padBottom(20).row();
+        this.add();
         this.add(_inventorySlotTable).row();
+
         this.pack();
 
     }
@@ -136,7 +147,7 @@ public class InventoryUI extends Window {
     }
 
     public void populateInventory(Table targetTable, Array<InventoryItemLocation> inventoryItems){
-        Array<Cell> cells = targetTable.getCells();
+        Array<Cell> cells = _inventorySlotTable.getCells();
         for(int i = 0; i < inventoryItems.size; i++){
             InventoryItemLocation itemLocation = inventoryItems.get(i);
             InventoryItem.ItemTypeID itemTypeID = InventoryItem.ItemTypeID.valueOf(itemLocation.getItemTypeArLocation());
