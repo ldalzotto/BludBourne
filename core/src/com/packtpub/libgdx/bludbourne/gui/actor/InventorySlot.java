@@ -20,9 +20,16 @@ public class InventorySlot extends Stack {
     private Label _numItempsLabel;
     private int _numItemsVal = 0;
     private int _filterItemType;
+    private SlotType _slotType;
+
+    public enum SlotType{
+        EQUIPMENT,
+        INVENTORY;
+    }
 
     public InventorySlot(){
         _filterItemType = 0; //filter nothing
+        _slotType = SlotType.INVENTORY;
         _defaultBackground = new Stack();
         _customBackgroundDecal = new Image();
         Image image = new Image(new NinePatch(Utility.STATUSUI_TEXTUREATLAS.createPatch("dialog")));
@@ -30,7 +37,7 @@ public class InventorySlot extends Stack {
 
         _numItempsLabel = new Label(String.valueOf(_numItemsVal), Utility.STATUSUI_SKIN, "inventory-item-count");
         _numItempsLabel.setAlignment(Align.bottomRight);
-        _numItempsLabel.setVisible(true);
+        _numItempsLabel.setVisible(false);
 
         this.add(_defaultBackground);
         this.add(_numItempsLabel);
@@ -41,6 +48,7 @@ public class InventorySlot extends Stack {
         _filterItemType = filterItemType;
         _customBackgroundDecal = customBackgroundDecal;
         _defaultBackground.add(_customBackgroundDecal);
+        _slotType = SlotType.EQUIPMENT;
     }
 
     public void decrementItemCount(){
@@ -168,4 +176,15 @@ public class InventorySlot extends Stack {
         inventorySlotTarget.add(tempArray);
     }
 
+    public SlotType get_slotType() {
+        return _slotType;
+    }
+
+    public Image get_customBackgroundDecal() {
+        return _customBackgroundDecal;
+    }
+
+    public Stack get_defaultBackground() {
+        return _defaultBackground;
+    }
 }

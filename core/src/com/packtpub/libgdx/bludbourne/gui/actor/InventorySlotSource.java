@@ -25,6 +25,9 @@ public class InventorySlotSource extends Source {
 
         _sourceSlot = (InventorySlot) getActor().getParent();
         _sourceSlot.decrementItemCount();
+        if(_sourceSlot.get_slotType().equals(InventorySlot.SlotType.EQUIPMENT)){
+            _sourceSlot.get_defaultBackground().add(_sourceSlot.get_customBackgroundDecal());
+        }
 
         payload.setDragActor(getActor());
         _dragAndDrop.setDragActorPosition(-x, -y + getActor().getHeight());

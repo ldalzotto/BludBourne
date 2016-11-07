@@ -86,11 +86,12 @@ public class InventoryUI extends Window {
                 new NinePatch(Utility.STATUSUI_TEXTUREATLAS.createPatch("dialog"))
         ).getDrawable());
 
-        headSlot.addListener(new InventorySlotTooltipListener(_inventorySlotTooltip));
-        leftArmSlot.addListener(new InventorySlotTooltipListener(_inventorySlotTooltip));
-        chestSlot.addListener(new InventorySlotTooltipListener(_inventorySlotTooltip));
-        rightArmSlot.addListener(new InventorySlotTooltipListener(_inventorySlotTooltip));
-        legsSlot.addListener(new InventorySlotTooltipListener(_inventorySlotTooltip));
+        headSlot.addListener(new InventorySlotTooltipListener(_inventorySlotTooltip, this));
+        leftArmSlot.addListener(new InventorySlotTooltipListener(_inventorySlotTooltip, this));
+        chestSlot.addListener(new InventorySlotTooltipListener(_inventorySlotTooltip, this));
+        rightArmSlot.addListener(new InventorySlotTooltipListener(_inventorySlotTooltip, this));
+        legsSlot.addListener(new InventorySlotTooltipListener(_inventorySlotTooltip, this));
+
 
         _dragAndDrop.addTarget(new InventorySlotTarget(headSlot));
         _dragAndDrop.addTarget(new InventorySlotTarget(leftArmSlot));
@@ -108,8 +109,8 @@ public class InventoryUI extends Window {
         //layout
         for(int i = 1; i <= _numSlots; i++){
             InventorySlot inventorySlot = new InventorySlot();
-            inventorySlot.addListener(new InventorySlotTooltipListener(_inventorySlotTooltip));
             _inventorySlotTable.add(inventorySlot).size(_slotWidth, _slotHeight);
+            inventorySlot.addListener(new InventorySlotTooltipListener(_inventorySlotTooltip, this));
 
             if(i % _lengthSlotRow == 0){
                 _inventorySlotTable.row();
@@ -156,6 +157,7 @@ public class InventoryUI extends Window {
             for(int index = 0; index < itemLocation.getNumberItemsAtLocation(); index ++){
                 inventorySlot.add(InventoryItemFactory.getInstance().getInventoryItem(itemTypeID));
                 _dragAndDrop.addSource(new InventorySlotSource(inventorySlot, _dragAndDrop));
+                _dragAndDrop.addTarget(new InventorySlotTarget(inventorySlot));
             }
 
         }
