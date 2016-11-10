@@ -20,6 +20,7 @@ public class InventoryItemFactory {
 
     private Json _json = new Json();
     private final String INVENTORY_ITEM = "scripts/inventory_items.json";
+    private final String INVENTORY_ITEM_TEST = "scripts/inventory_items_test.json";
     private static InventoryItemFactory _instance = null;
     private Hashtable<InventoryItem.ItemTypeID, InventoryItem> _inventoryItemList;
 
@@ -50,13 +51,14 @@ public class InventoryItemFactory {
     }
 
     public Array<InventoryItemLocation> getInitInventory(){
-        ArrayList<JsonValue> list = _json.fromJson(ArrayList.class, Gdx.files.internal(INVENTORY_ITEM));
+        ArrayList<JsonValue> list = _json.fromJson(ArrayList.class, Gdx.files.internal(INVENTORY_ITEM_TEST));
         Array<InventoryItemLocation> locationList = new Array<InventoryItemLocation>();
         int counter = 0;
         for (JsonValue jsonValue:
              list) {
-            InventoryItem inventoryItem = _json.readValue(InventoryItem.class, jsonValue);
-            locationList.add(new InventoryItemLocation(counter, inventoryItem.getItemTypeID().toString(), 1));
+            Integer numberOfItem = _json.readValue("numberOfItem", Integer.class, jsonValue);
+            InventoryItem inventoryItem = _json.readValue("inventoryItem", InventoryItem.class, jsonValue);
+            locationList.add(new InventoryItemLocation(counter, inventoryItem.getItemTypeID().toString(), numberOfItem));
             counter ++;
         }
         return locationList;

@@ -43,6 +43,7 @@ public class InventorySlotTarget extends Target{
         }
 
         if(!_targetSlot.hasItem()){
+            //if there is no items at target
             _targetSlot.add(sourceActor);
         } else {
             //If the same item and stackable, add

@@ -23,10 +23,9 @@ public class BludBourne extends Game {
 
 	@Override
 	public void create() {
-		_mainMenuGameScreen = new MainMenuScreen(this);
-		_mainGameScreen = new MainGameScreen(this);
-		//setScreen(_mainGameScreen);
-		setScreen(_mainMenuGameScreen);
+		//mainGameScreenInitializer();
+
+		testGameScreenInitializer();
 	}
 
 	@Override
@@ -42,5 +41,17 @@ public class BludBourne extends Game {
 			case MAIN_MENU_SCREEN:
 				return;
 		}
+	}
+
+	private void mainGameScreenInitializer(){
+		_mainMenuGameScreen = new MainMenuScreen(this);
+		_mainGameScreen = new MainGameScreen(this);
+		setScreen(_mainMenuGameScreen);
+	}
+
+	private void testGameScreenInitializer(){
+		_mainGameScreen = new MainGameScreen(this);
+		_mainMenuGameScreen = new MainMenuScreen(this);
+		setScreen(_mainGameScreen);
 	}
 }

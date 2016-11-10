@@ -11,7 +11,7 @@ public class InventoryItem extends Image {
     public enum ItemAttribute{
         CONSUMABLE(1),
         EQUIPPABLE(2),
-        STACKABLE(4);
+        STACKABLE(5);
 
         private int _attribute;
 

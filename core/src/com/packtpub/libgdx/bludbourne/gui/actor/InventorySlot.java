@@ -172,7 +172,7 @@ public class InventorySlot extends Stack {
         //swap
         Array<Actor> tempArray = inventorySlotSource.getAllInventoryItems();
         tempArray.add(dragActor);
-        inventorySlotSource.add(inventorySlotTarget.getTopInventoryItem());
+        inventorySlotSource.add(inventorySlotTarget.getAllInventoryItems());
         inventorySlotTarget.add(tempArray);
     }
 
