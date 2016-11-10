@@ -149,15 +149,22 @@ public class InventoryUI extends Window {
 
     public void populateInventory(Table targetTable, Array<InventoryItemLocation> inventoryItems){
         Array<Cell> cells = _inventorySlotTable.getCells();
+
+        //initiate all cells as target
+        for(int i = 0; i < cells.size; i++){
+            InventorySlot inventorySlot = ((InventorySlot) cells.get(i).getActor());
+            _dragAndDrop.addTarget(new InventorySlotTarget(inventorySlot));
+        }
+
         for(int i = 0; i < inventoryItems.size; i++){
             InventoryItemLocation itemLocation = inventoryItems.get(i);
             InventoryItem.ItemTypeID itemTypeID = InventoryItem.ItemTypeID.valueOf(itemLocation.getItemTypeArLocation());
             InventorySlot inventorySlot = ((InventorySlot) cells.get(itemLocation.getLocationIndex()).getActor());
 
+
             for(int index = 0; index < itemLocation.getNumberItemsAtLocation(); index ++){
                 inventorySlot.add(InventoryItemFactory.getInstance().getInventoryItem(itemTypeID));
                 _dragAndDrop.addSource(new InventorySlotSource(inventorySlot, _dragAndDrop));
-                _dragAndDrop.addTarget(new InventorySlotTarget(inventorySlot));
             }
 
         }
