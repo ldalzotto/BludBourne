@@ -6,7 +6,7 @@
 			itemTypeID: SHIELD01,
 			itemShortDescription: Medium tier shield forged from copper
 		},
-		numberOfItem: 1
+		numberOfItem: 2
 	},	{
 		inventoryItem: {
 			itemAttributes: 5,

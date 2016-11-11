@@ -8,11 +8,13 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.packtpub.libgdx.bludbourne.Entity;
+import com.packtpub.libgdx.bludbourne.profile.ProfileManager;
+import com.packtpub.libgdx.bludbourne.profile.ProfileObserver;
 
 /**
  * Created by ldalzotto on 29/10/2016.
  */
-public class MapManager {
+public class MapManager implements ProfileObserver{
 
     private static final String TAG = MapManager.class.getSimpleName();
 
@@ -77,6 +79,33 @@ public class MapManager {
             }
         }
         return returnEntity;
+    }
+
+    @Override
+    public void onNotify(ProfileManager profileManager, ProfileEvent profileEvent) {
+        switch (profileEvent){
+            case PROFILE_LOADED:
+                String currentMap = profileManager.getProperty("currentMapType", String.class);
+                MapFactory.MapType mapType;
+                if(currentMap == null || currentMap.isEmpty()){
+                    mapType = MapFactory.MapType.TOWN;
+                } else {
+                    mapType = MapFactory.MapType.valueOf(currentMap);
+                }
+                loadMap(mapType);
+                break;
+            case SAVING_PROFILE:
+                if(_currentMap == null){
+                    break;
+                }
+                profileManager.setProperty(
+                        "currentMapType",
+                        _currentMap._currentMapType.toString()
+                );
+                break;
+            default:
+                break;
+        }
     }
 
     public void setPlayer(Entity entity){

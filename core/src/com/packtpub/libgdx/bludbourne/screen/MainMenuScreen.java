@@ -3,27 +3,17 @@ package com.packtpub.libgdx.bludbourne.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.packtpub.libgdx.bludbourne.BludBourne;
 import com.packtpub.libgdx.bludbourne.Utility;
-import com.packtpub.libgdx.bludbourne.gui.actor.inventoryButton.InventoryButtonObservable;
-import com.packtpub.libgdx.bludbourne.gui.actor.inventoryButton.InventoryReturnButtonListener;
 import com.packtpub.libgdx.bludbourne.multiplexer.GlobalMultiplexer;
 import com.packtpub.libgdx.bludbourne.screen.viewport.GlobalViewport;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 /**
  * Created by ldalzotto on 06/11/2016.
@@ -33,7 +23,6 @@ public class MainMenuScreen extends GlobalViewport implements Screen{
     private static final String TAG = MainMenuScreen.class.getSimpleName();
 
     private BludBourne _game;
-
 
     private OrthographicCamera _mainMenuCamera;
     private Viewport _viewport;
@@ -63,6 +52,8 @@ public class MainMenuScreen extends GlobalViewport implements Screen{
         TextButton exitButton = new TextButton("EXIT", Utility.MAINMENU_SKIN);
 
         newGameButton.addListener(new NewGameButtonListener(_game));
+        loadButton.addListener(new LoadProfileButtonListener(_game));
+
         _table.add(newGameButton).padBottom(10f);
         _table.row();
         _table.add(loadButton).padBottom(10f);
@@ -103,7 +94,7 @@ public class MainMenuScreen extends GlobalViewport implements Screen{
 
     @Override
     public void dispose() {
-
+        _stage.dispose();
     }
 
     public class NewGameButtonListener extends InputListener{
@@ -118,10 +109,30 @@ public class MainMenuScreen extends GlobalViewport implements Screen{
 
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            Gdx.app.debug(TAG, "Switching to main game scrren.");
+            Gdx.app.debug(TAG, "Switching to create profle scrren.");
             GlobalMultiplexer.getInstance().getInputMultiplexer().removeProcessor(_stage);
             Gdx.input.setInputProcessor(GlobalMultiplexer.getInstance().getInputMultiplexer());
-            _game.switchScreen(BludBourne.ScreenType.MAIN_GAME_SCREEN);
+            _game.switchScreen(BludBourne.ScreenType.NEW_PROFILE_SCREEN);
+            return true;
+        }
+    }
+
+    public class LoadProfileButtonListener extends InputListener{
+
+        private final String TAG = LoadProfileButtonListener.class.getSimpleName();
+
+        private BludBourne _game;
+
+        public LoadProfileButtonListener(BludBourne game){
+            _game = game;
+        }
+
+        @Override
+        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            Gdx.app.debug(TAG, "Switching to load profle scrren.");
+            GlobalMultiplexer.getInstance().getInputMultiplexer().removeProcessor(_stage);
+            Gdx.input.setInputProcessor(GlobalMultiplexer.getInstance().getInputMultiplexer());
+            _game.switchScreen(BludBourne.ScreenType.LOAD_PROFILE_TYPE);
             return true;
         }
     }

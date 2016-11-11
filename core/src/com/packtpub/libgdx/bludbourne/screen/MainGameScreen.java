@@ -12,6 +12,7 @@ import com.packtpub.libgdx.bludbourne.gui.PlayerHUD;
 import com.packtpub.libgdx.bludbourne.map.Map;
 import com.packtpub.libgdx.bludbourne.map.MapManager;
 import com.packtpub.libgdx.bludbourne.multiplexer.GlobalMultiplexer;
+import com.packtpub.libgdx.bludbourne.profile.ProfileManager;
 import com.packtpub.libgdx.bludbourne.screen.viewport.GlobalViewport;
 
 /**
@@ -37,6 +38,9 @@ public class MainGameScreen extends GlobalViewport implements Screen {
         _mapMgr = new MapManager();
         _json = new Json();
         _game = game;
+
+        ProfileManager.getInstance().addObserver(_mapMgr);
+
     }
 
     @Override
@@ -113,6 +117,11 @@ public class MainGameScreen extends GlobalViewport implements Screen {
 
     @Override
     public void dispose() {
+
+        //Save the game
+        Gdx.app.debug(TAG, "Saving game...");
+        ProfileManager.getInstance().saveProfile();
+
         if(_player != null && _mapRenderer != null){
             _player.dispose();
             _mapRenderer.dispose();

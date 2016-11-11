@@ -70,6 +70,7 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
             } else if(string[0].equalsIgnoreCase(MESSAGE.INIT_SELECT_ENTITY.toString())){
                 _mouseSelectCoordinates = _json.fromJson(Vector3.class, string[1]);
                 _isMouseSelectEnable = true;
+                Gdx.app.debug(TAG, "INIT_SELECT_ENTITY message received : " + _mouseSelectCoordinates);
             }
         }
 

@@ -12,7 +12,9 @@ import java.util.Hashtable;
 /**
  * Created by ldalzotto on 06/11/2016.
  */
-public class ProfileManager {
+public class ProfileManager extends ProfileSubject{
+
+    private static final String TAG = ProfileManager.class.getSimpleName();
 
     private Json _json;
     private static ProfileManager _profileManager;
@@ -81,7 +83,7 @@ public class ProfileManager {
 
         FileHandle file = null;
         if(Gdx.files.isLocalStorageAvailable()){
-            file = Gdx.files.internal(fullFilename);
+            file = Gdx.files.local(fullFilename);
             file.writeString(fileData, !overwrite);
         }
 
@@ -100,6 +102,44 @@ public class ProfileManager {
         }
         property = (T)_profileProperties.get(key);
         return property;
+    }
+
+    public void saveProfile(){
+        notify(this, ProfileObserver.ProfileEvent.SAVING_PROFILE);
+        String text = _json.prettyPrint(_json.toJson(_profileProperties));
+        writeProfileToStorage(_profileName, text, true);
+    }
+
+    public void loadProfile(){
+        String fullProfileName = _profileName+SAVEGAME_SUFFIX;
+        boolean doesProfileFileExist = Gdx.files.internal(fullProfileName).exists();
+
+        if(!doesProfileFileExist){
+            Gdx.app.debug(TAG, "File doesn't exist. Initializing");
+            saveProfile();
+            return;
+        }
+
+        _profileProperties = _json.fromJson(
+                ObjectMap.class, _profiles.get(_profileName));
+        if(_profileProperties == null){
+            _profileProperties = new ObjectMap<String, Object>();
+        }
+        notify(this, ProfileObserver.ProfileEvent.PROFILE_LOADED);
+    }
+
+    public void setCurrentProfile(String profileName){
+        if(doesProfileExist(profileName)){
+            _profileName = profileName;
+        } else {
+            _profileName = DEFAULT_PROFILE;
+        }
+    }
+
+    public void initiateNewProfile(String profileName){
+        writeProfileToStorage(profileName, "", true);
+        setCurrentProfile(profileName);
+        loadProfile();
     }
 
 }
